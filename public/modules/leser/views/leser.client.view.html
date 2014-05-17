@@ -1,0 +1,7 @@
+<section data-ng-controller="LeserController">
+    <div class="book">
+        <div ng-scroll="row in Tilemap" buffer-size="2" padding="1">
+            <img ng-repeat="column in row" ng-src="{{column.url}}" style="zoom:60%" />
+        </div>
+    </div>
+</section>
