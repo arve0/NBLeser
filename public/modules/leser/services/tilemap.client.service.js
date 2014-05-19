@@ -5,13 +5,20 @@ angular.module('leser').factory('Tilemap', ['$http', '$timeout', '$q',
         var _pages;
 
 
+        var updateLevel = function(level){
+            angular.forEach(_pages, function(page){
+                page.currentLevel = page.tileMap.levels[level];
+            });
+        };
+
+        var getNumberOfLevels = function(){
+            return _pages[0].tileMap.levels.length;
+        };
+
         var getPages = function(urn){
             _pages = [];
-            _pages.updateLevel = function(level){
-                angular.forEach(_pages, function(page){
-                    page.currentLevel = page.tileMap.levels[level];
-                });
-            };
+            _pages.updateLevel = updateLevel;
+            _pages.getNumberOfLevels = getNumberOfLevels;
 
             var deferred = $q.defer();
             $http.get('/getJSON/' + urn).success(function(data){
@@ -49,7 +56,8 @@ angular.module('leser').factory('Tilemap', ['$http', '$timeout', '$q',
                         }
                     });
                 });
-            deferred.resolve(_pages);
+                deferred.resolve(_pages);
+                console.log(_pages[22]);
             });
             return deferred.promise;
         };
