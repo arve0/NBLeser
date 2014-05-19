@@ -1,9 +1,17 @@
 <section data-ng-controller="HomeController">
-    <h2>Skriv inn URN</h2>
+    <h2>Søk</h2>
+    <div class="form-inline">
+        <form ng-submit="search(query)">
+            <input type="text" ng-model="query" class="form-control" size="40">
+            <button class="btn btn-default">Gå til første treff!</button>
+        </form>
+    </div>
+    <br><br>
+    <h2>Gå direkte til bok med URN</h2>
     <div class="form-inline">
         <form ng-submit="les(urn)">
             <input type="text" ng-model="urn" class="form-control" size="40">
-            <button class="btn">Les!</button>
+            <button class="btn btn-default">Les!</button>
         </form>
     </div>
 </section>

@@ -9,12 +9,11 @@ Prøv appen her: http://nbleser.heroku.com
 
 Ressurser som er brukt
 ======================
-
 Tilemap service:
-http://www.nb.no/services/tilesv2/tilemap?viewer=html&URN=URN:NBN:no-nb_digibok_2008103000046&pagetype=&format=json
+http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=
 
-Hente tiles:
-http://www.nb.no/services/image/resolver?url_ver=geneza&urn=URN:NBN:no-nb_digibok_2008103000046_0004&maxLevel=6&level=3&col=0&row=0&resX=2242&resY=3169&tileWidth=1024&tileHeight=1024
+Hente tiles(fra tilemap):
+http://www.nb.no/services/image/
 
 
 

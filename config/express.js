@@ -33,7 +33,7 @@ module.exports = function() {
 		next();
 	});
 
-	// Should be placed before express.static
+        // Should be placed before express.static
 	app.use(compress({
 		filter: function(req, res) {
 			return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
