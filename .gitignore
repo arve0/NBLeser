@@ -9,4 +9,3 @@ app/tests/coverage/
 .idea/
 *.swp
 mongo
-public/dist/
