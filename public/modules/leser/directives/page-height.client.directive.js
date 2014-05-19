@@ -18,7 +18,8 @@ angular.module('leser').directive('pageHeight', ['$timeout',
                 }
 
                 scope.$watch('zoom', function(){
-                    setHeight();
+                    // let browser get time to resize images before height is set
+                    $timeout(setHeight);
                 });
             }
         };
