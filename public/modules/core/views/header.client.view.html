@@ -9,39 +9,28 @@
         <a href="/#!/" class="navbar-brand">NBLeser</a>
     </div>
     <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
-        <div class="zoom-controls">
+        <ul class="nav navbar-nav">
+            <li data-ng-repeat="item in menu.items" ui-route="{{item.uiRoute}}" ng-class="{active: $uiRoute}">
+                    <a href="/#!/{{item.link}}">{{item.title}}</a>
+            </li>
+        </ul>
+        <div class="zoom-controls" ng-if="controls.show">
             <div class="form-inline">
                 <p>Kvalitet</p>
-                <select ng-model="level" class="form-control">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                <select ng-model="controls.level" ng-options="level for level in controls.levels" class="form-control">
                 </select>
             </div>
             <div class="form-inline">
                 <p>Zoom</p>
-                <select ng-model="zoom" class="form-control">
-                    <option value="10">10%</option>
-                    <option value="20">20%</option>
-                    <option value="30">30%</option>
-                    <option value="40">40%</option>
-                    <option value="50">50%</option>
-                    <option value="60">60%</option>
-                    <option value="70">70%</option>
-                    <option value="80">80%</option>
-                    <option value="90">90%</option>
-                    <option value="100">100%</option>
+                <select ng-model="controls.zoom" class="form-control" ng-options="zoom.value as zoom.text for zoom in controls.zoomValues">
                 </select>
             </div>
-        </div>
-        <div class="goto form-inline">
-            <form ng-submit="goto(page)">
-                <input type="number" ng-model="page" class="form-control">
-                <button class="btn btn-primary">Gå til side</button>
-            </form>
+            <div class="goto form-inline">
+                <form ng-submit="goto(page)">
+                    <input type="number" ng-model="page" class="form-control">
+                    <button class="btn btn-primary">Gå til side</button>
+                </form>
+            </div>
         </div>
     </nav>
 </div>

@@ -2,11 +2,20 @@
 
 angular.module('leser').controller('LeserController', ['$scope', '$rootScope', 'Tilemap', '$document', '$stateParams',
         function($scope, $rootScope, Tilemap, $document, $stateParams) {
-        // Controller Logic
+
         var urn = $stateParams.urn;
         var pagePromise = Tilemap.getPages(urn);
 
-        $rootScope.$watch('zoom', function(value){
+        $rootScope.controls = {};
+        $rootScope.controls.show = true;
+        $rootScope.controls.level = 5;
+        $rootScope.controls.zoom = 100;
+        $rootScope.controls.zoomValues = [];
+        for (var z=10; z<=100; z+=10){
+            $rootScope.controls.zoomValues.push({value: z, text: z + '%'});
+        }
+
+        $rootScope.$watch('controls.zoom', function(value){
             $scope.width = function(){
                 return { 
                     width: value + '%',
@@ -30,8 +39,12 @@ angular.module('leser').controller('LeserController', ['$scope', '$rootScope', '
 
         pagePromise.then(function(pages){
             $scope.pages = pages;
-            $scope.pages.updateLevel($scope.level);
-            $scope.$watch('level', function(level){
+            $rootScope.controls.levels = [];
+            for (var i=0;i<pages.getNumberOfLevels();i++){
+                $rootScope.controls.levels.push(i);
+            }
+            $scope.pages.updateLevel($rootScope.controls.level);
+            $rootScope.$watch('controls.level', function(level){
                 $scope.pages.updateLevel(level);
             });
         });

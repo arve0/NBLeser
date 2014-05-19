@@ -17,7 +17,7 @@ angular.module('leser').directive('pageHeight', ['$timeout',
                     scope.page.offsetTop = element.prop('offsetTop');
                 }
 
-                scope.$watch('zoom', function(){
+                scope.$watch('controls.zoom', function(){
                     // let browser get time to resize images before height is set
                     $timeout(setHeight);
                 });

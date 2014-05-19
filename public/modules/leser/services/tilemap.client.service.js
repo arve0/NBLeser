@@ -57,7 +57,6 @@ angular.module('leser').factory('Tilemap', ['$http', '$timeout', '$q',
                     });
                 });
                 deferred.resolve(_pages);
-                console.log(_pages[22]);
             });
             return deferred.promise;
         };
