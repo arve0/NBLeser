@@ -16,6 +16,18 @@ http://www.nb.no/services/image/resolver?url_ver=geneza&urn=URN:NBN:no-nb_digibo
 
 
 
+Installer og kjør
+=================
+```
+git clone https://github.com/arve0/NBLeser.git
+cd NBLeser
+npm install
+grunt
+```
+Åpne nettleser og gå til http://localhost:3000/
+
+
+
 Andre mulige ressurser
 ======================
 OpenSearch API:

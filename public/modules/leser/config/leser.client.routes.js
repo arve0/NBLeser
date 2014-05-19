@@ -6,7 +6,7 @@ angular.module('leser').config(['$stateProvider',
 		// Leser state routing
 		$stateProvider.
 		state('/leser', {
-			url: '/leser',
+			url: '/leser/:urn',
 			templateUrl: 'modules/leser/views/leser.client.view.html'
 		});
 	}

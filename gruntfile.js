@@ -37,7 +37,19 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true,
                 }
-            }
+            },
+            clientLESS: {
+                files: ['public/**/css/*.less'],
+                tasks: ['less'],
+            },
+        },
+        less: {
+            all: {
+                options: { compress: false },
+                files: {
+                    'public/modules/core/css/core.css': 'public/modules/core/css/core.less',
+                },
+            },
         },
         jshint: {
             all: {

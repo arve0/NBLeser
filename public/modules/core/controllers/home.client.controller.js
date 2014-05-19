@@ -1,5 +1,8 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication', function ($scope, Authentication) {
-    $scope.authentication = Authentication;
+angular.module('core').controller('HomeController', ['$scope', '$location',
+function ($scope, $location) {
+    $scope.les = function(urn){
+        $location.url('/leser/' + urn);
+    };
 }]);

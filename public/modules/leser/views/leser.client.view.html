@@ -1,7 +1,12 @@
 <section data-ng-controller="LeserController">
-    <div class="book">
-        <div ng-scroll="row in Tilemap" buffer-size="2" padding="1">
-            <img ng-repeat="column in row" ng-src="{{column.url}}" style="zoom:60%" />
+    <div class="book" ng-style="width()">
+        <div ng-repeat="page in pages" id="{{$index + 1}}" class="page" page-height>
+            <div ng-repeat="row in page.currentLevel.images" class="tile-row">
+                <img ng-repeat="image in row" ng-if="show(scrollTop.value, page.offsetTop)"
+                     style="-webkit-flex:{{$last && page.currentLevel.lastColumnScale ? page.currentLevel.lastColumnScale : 1}}"
+                     ng-src="{{image}}" />
+                </div>
+            </div>
         </div>
     </div>
 </section>

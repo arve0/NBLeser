@@ -1,0 +1,101 @@
+/* Mixins */
+
+.flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.flex(@values) {
+    -webkit-box-flex: @values;
+    -moz-box-flex:  @values;
+    -webkit-flex:  @values;
+    -ms-box-flex: @values;
+    -ms-flex:  @values;
+    flex:  @values;
+}
+.flex-direction(@value) {
+    -webkit-flex-direction:@value;
+    flex-direction:@value;
+}
+
+html {
+    height:100%;
+}
+body {
+    min-height:100%;
+}
+.content {
+	margin-top: 50px;
+}
+.undecorated-link:hover {
+	text-decoration: none;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+
+.zoom-controls {
+    float:right;
+    padding-top:4px;
+
+    > div {
+        float:left;
+        padding:0 10px;
+    }
+
+    p {
+        color:#ffffff;
+        margin:0;
+        float:left;
+        clear:none;
+        padding-top:8px;
+        padding-right:4px;
+        font-size:18px;
+    }
+    select {
+        float:left;
+        width:auto;
+    }
+}
+.goto {
+    float:right;
+    padding-top:8px;
+    button {
+        float:left;
+        width:auto;
+        margin-right:4px;
+    }
+    input {
+        float:left;
+        width:65px !important;
+        margin-right:4px;
+    }
+}
+
+.container {
+    padding: 0;
+    margin: 0 auto;
+}
+.book {
+    margin:0 auto;
+    .page {
+        .flexbox();
+        .flex-direction(column);
+        width:100%;
+        min-height:100px;
+
+        .tile-row {
+            .flexbox();
+            width:100%;
+
+            img {
+                width:100%;
+                height:auto;
+                display:block;
+            }
+        }
+    }
+}

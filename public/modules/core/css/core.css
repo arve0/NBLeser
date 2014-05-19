@@ -1,16 +1,87 @@
+/* Mixins */
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+}
 .content {
-	margin-top: 50px;
+  margin-top: 50px;
 }
 .undecorated-link:hover {
-	text-decoration: none;
+  text-decoration: none;
 }
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-	display: none !important;
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
+.zoom-controls {
+  float: right;
+  padding-top: 4px;
+}
+.zoom-controls > div {
+  float: left;
+  padding: 0 10px;
+}
+.zoom-controls p {
+  color: #ffffff;
+  margin: 0;
+  float: left;
+  clear: none;
+  padding-top: 8px;
+  padding-right: 4px;
+  font-size: 18px;
+}
+.zoom-controls select {
+  float: left;
+  width: auto;
+}
+.goto {
+  float: right;
+  padding-top: 8px;
+}
+.goto button {
+  float: left;
+  width: auto;
+  margin-right: 4px;
+}
+.goto input {
+  float: left;
+  width: 65px !important;
+  margin-right: 4px;
 }
 .container {
-    margin: 0 20px;
-    padding: 0;
+  padding: 0;
+  margin: 0 auto;
 }
 .book {
-    margin-top:40px;
+  margin: 0 auto;
+}
+.book .page {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100px;
+}
+.book .page .tile-row {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+}
+.book .page .tile-row img {
+  width: 100%;
+  height: auto;
+  display: block;
 }

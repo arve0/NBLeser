@@ -2,47 +2,62 @@
 
 angular.module('leser').factory('Tilemap', ['$http', '$timeout', '$q',
     function($http, $timeout, $q) {
-        var _tilemap = [];
-        var _done = false;
+        var _pages;
 
-        var requestTiles = function(urn, level){
-            $http.get('/getJSON/' + urn).success(function(data){
-                angular.forEach(data.pages.pages, function(page){
-                    var templateUrl = page.tileMap.image.pyramid.levels[level].uri.template;
-                    var rows = page.tileMap.image.pyramid.levels[level].rows;
-                    var columns = page.tileMap.image.pyramid.levels[level].columns;
-                    for (var i=0; i < rows; i++){
-                        _tilemap.push([]);
-                        for (var j=0; j < columns; j++){
-                            var url = templateUrl.replace('{row}', i).replace('{column}', j);
-                            var lastRow = _tilemap.length - 1;
-                            _tilemap[lastRow].push({url: url});
-                        }
-                    }
+
+        var getPages = function(urn){
+            _pages = [];
+            _pages.updateLevel = function(level){
+                angular.forEach(_pages, function(page){
+                    page.currentLevel = page.tileMap.levels[level];
                 });
-            _done = true;
+            };
+
+            var deferred = $q.defer();
+            $http.get('/getJSON/' + urn).success(function(data){
+                angular.forEach(data.pages.pages, function(page, index){
+                    _pages.push({
+                        pageId: page.pg_id,
+                        pageLabel: page.pg_label,
+                        pageType: page.pg_type,
+                        resolution: page.resolution,
+                        tileHeight: page.tileHeight,
+                        tileMap: page.tileMap.image.pyramid,
+                    });
+                    angular.forEach(_pages[index].tileMap.levels, function(level){
+                        var templateUrl = level.uri.template;
+                        level.images = [];
+                        // set scale of last row/column
+                        var pixels;
+                        var tileHeight = _pages[index].tileMap.tileHeight;
+                        var tileWidth = _pages[index].tileMap.tileWidth;
+                        if (level.height > tileHeight) {
+                            pixels = level.height - (level.rows-1) * tileHeight;
+                            level.lastRowScale = pixels / tileHeight;
+                        }
+                        if (level.width > tileWidth) {
+                            pixels = level.width - (level.columns-1) * tileWidth;
+                            level.lastColumnScale = pixels / tileWidth;
+                        }
+                        // store images in 2d array for easier access
+                        for (var i=0; i < level.rows; i++){
+                            level.images.push([]);
+                            for (var j=0; j < level.columns; j++){
+                                var url = templateUrl.replace('{row}', i).replace('{column}', j);
+                                level.images[i].push(url);
+                            }
+                        }
+                    });
+                });
+            deferred.resolve(_pages);
             });
-        };
-
-
-        var get = function(index, count, next){
-            index -= 1;
-            console.log('getting slice: ', index, count);
-            if (index + count <= 0) return next([]);
-            var start = index > 0 ? index : 0;
-            return next(_tilemap.slice(start,index + count));
-        };
-
-        var revision = function() {
-            return _done;
+            return deferred.promise;
         };
 
 
         // Public API
         return {
-            requestTiles: requestTiles,
-            get: get,
-            revision: revision,
+            getPages: getPages,
         };
     }
 ]);
