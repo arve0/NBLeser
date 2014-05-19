@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$rootScope', 'Menus', '$anchorScroll', '$location',
-    function($scope, $rootScope, Menus, $anchorScroll, $location) {
+angular.module('core').controller('HeaderController', ['$scope', '$rootScope', 'Menus', '$anchorScroll', '$location', 'Tilemap',
+    function($scope, $rootScope, Menus, $anchorScroll, $location, Tilemap) {
         $scope.isCollapsed = false;
         $scope.menu = Menus.getMenu('topbar');
 
