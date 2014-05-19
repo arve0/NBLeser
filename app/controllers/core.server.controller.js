@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 	res.render('index');
 };
 
-exports.getJSON = function(req,res) {
+exports.tilemap = function(req,res) {
     var _url = 'http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&callback=JSONP&URN=' + req.params.urn;
     http.get(_url,function(response){
         var data = '';

@@ -21,7 +21,7 @@ angular.module('leser').factory('Tilemap', ['$http', '$timeout', '$q',
             _pages.getNumberOfLevels = getNumberOfLevels;
 
             var deferred = $q.defer();
-            $http.get('/getJSON/' + urn).success(function(data){
+            $http.get('/tilemap/' + urn).success(function(data){
                 angular.forEach(data.pages.pages, function(page, index){
                     _pages.push({
                         pageId: page.pg_id,
