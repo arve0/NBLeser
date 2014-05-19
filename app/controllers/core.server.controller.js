@@ -6,9 +6,7 @@ var http = require('http');
  * Module dependencies.
  */
 exports.index = function(req, res) {
-	res.render('index', {
-		user: req.user || null
-	});
+	res.render('index');
 };
 
 exports.getJSON = function(req,res) {
