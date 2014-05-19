@@ -4,6 +4,8 @@ Et alternativ til nasjonalbibliotekets egen nettleser (som ikke fungerer bra på
 
 Utviklet med mean.js.
 
+Prøv appen her: http://nbleser.heroku.com
+
 
 Ressurser som er brukt
 ======================
