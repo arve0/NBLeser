@@ -37,11 +37,14 @@
     background-color: #f80;
 }
 .home {
-    .flexbox();
-    width:50%;
+    width:90%;
     margin:0 auto;
     .search-input {
-        .flexbox();
+        margin: 0 auto;
+        > * {
+            display:inline-block;
+            white-space: nowrap;
+        }
         button {
             margin-right:4px;
         }

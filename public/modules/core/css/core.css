@@ -3,20 +3,15 @@
   background-color: #f80;
 }
 .home {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  width: 50%;
+  width: 90%;
   margin: 0 auto;
 }
 .home .search-input {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+  margin: 0 auto;
+}
+.home .search-input > * {
+  display: inline-block;
+  white-space: nowrap;
 }
 .home .search-input button {
   margin-right: 4px;
