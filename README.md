@@ -1,6 +1,6 @@
 Om
 ==
-Dette er en alternativ leser for den digitale bokhylla til Nasjonalbiblioteket. Du kan bruke leseren her: nbleser.heroku.com
+Dette er en alternativ leser for den digitale bokhylla til Nasjonalbiblioteket. Du kan bruke leseren her: http://nbleser.heroku.com
 
 Hvorfor
 =======
