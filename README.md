@@ -1,24 +1,43 @@
-NBLeser
+Om
+==
+Dette er en alternativ leser for den digitale bokhylla til Nasjonalbiblioteket. Du kan bruke leseren her: nbleser.heroku.com
+
+Hvorfor
 =======
-Et alternativ til nasjonalbibliotekets egen nettleser (som ikke fungerer bra på iPad).
+Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre den. Her er noen av de tingene jeg mener ikke er optimale:
 
-Utviklet med mean.js.
+* Kræsjer ofte - ubrukelig på iPad
+* Dårlige muligheter for zoom
+* Dårlig kontroll over kvalitet
+* Ikke tilpasset fullscreen for iPad
+* Vanskelig å gå til bestemt side (liten scroller)
+* Popup med vilkår - unødvendig påtrengende
 
-Prøv appen her: http://nbleser.heroku.com
+Poengene er demonstrert her: http://youtu.be/zvQaJ54-P4s
 
+# Nåværende mangler i NBleser
+Søk etter bok:
+* Hopper kun til første treff
+* Mangler avansert søk (forfatter, år, osv)
 
-Ressurser som er brukt
-======================
+Tekstsøk i bok
+
+# Nettressurser
+Ressursene hentes av node.js ettersom nb.no ikke har satt access-control-allow-origin på nettressursene.
+
+OpenSearch:
+http://www.nb.no/services/search/v2/
+
 Tilemap service:
 http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=
 
 Hente tiles(fra tilemap):
 http://www.nb.no/services/image/
 
+## Ressurser som ikke er tatt i bruk
+Søkeforslag - http://www.nb.no/nbsok/suggestion/search?searchString=jo&maxResults=5&mediaType=&highlight=true
 
-
-Installer og kjør
-=================
+# Installer og kjør
 ```
 git clone https://github.com/arve0/NBLeser.git
 cd NBLeser
@@ -27,14 +46,5 @@ grunt
 ```
 Åpne nettleser og gå til http://localhost:3000/
 
-
-
-Andre mulige ressurser
-======================
-OpenSearch API:
-http://www.nb.no/services/search/v2/
-http://www.nb.no/services/search/v2/search?q=arve&itemsPerPage=2
-
-Søk etter forslag:
-http://www.nb.no/nbsok/suggestion/search?searchString=jo&maxResults=5&mediaType=&highlight=true
-
+# Lisens
+MIT (les lisens)[LICENSE.md]
