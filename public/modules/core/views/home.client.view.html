@@ -1,17 +1,38 @@
-<section data-ng-controller="HomeController">
-    <h2>Søk</h2>
-    <div class="form-inline">
-        <form ng-submit="search(query)">
-            <input type="text" ng-model="query" class="form-control" size="40">
-            <button class="btn btn-default">Gå til første treff!</button>
-        </form>
-    </div>
-    <br><br>
-    <h2>Gå direkte til bok med URN</h2>
-    <div class="form-inline">
-        <form ng-submit="les(urn)">
-            <input type="text" ng-model="urn" class="form-control" size="40">
-            <button class="btn btn-default">Les!</button>
-        </form>
+<section data-ng-controller="HomeController" class="home">
+    <div>
+        <div class="alert alert-warning" ng-if="error">{{error}}</div>
+        <div class="form-inline search-input">
+            <form ng-submit="search(query)">
+                <input type="text" ng-model="query" class="form-control" size="40">
+                <button class="btn btn-default">Søk</button>
+            </form>
+            <button class="btn btn-success" ng-click="readFirst(query)">Les første treff</button>
+            <button class="btn btn-primary" ng-click="read(query)">Les URN</button>
+        </div>
+        <h3>Søketips</h3>
+        <p class="search-tips">
+            <strong>Sammenhengende ord</strong><br>
+            Bruk anførselstegn(") for å kreve at ord kommer etter hverandre.<br>
+            Eksempel: <em ng-click="query = '&quot;kommunen som&quot;'">"kommunen som"</em>.<br><br>
+            <strong>Tittel</strong><br>
+            Søk bare i tittel med å bruke t:tittel.<br>
+            Eksempel: <em ng-click="query = 't:dråper'">t:dråper</em>.<br><br>
+            <strong>Forfatter</strong><br>
+            Bruk f:forfatter for å søke etter en spesifikk forfatter.<br>
+            Eksempel: <em ng-click="query = 'f:seljebu'">f:seljebu</em> eller <em ng-click="query = 'f:&quot;lars kristian&quot;'">f:"lars kristian"</em>.<br><br>
+            <strong>År</strong><br>
+            Bruk å:årstall for å søke etter bøker som er utgitt på et gitt årstall.<br>
+            Eksempel: <em ng-click="query = 'å:2000'">å:2000</em>.<br><br>
+            <strong>ISBN</strong><br>
+            Bruk i:isbn for å søke etter bok med gitt ISBN.<br>
+            Eksempel: <em ng-click="query = 'i:0132711982'">i:0132711982</em>.<br><br>
+            <strong>Fritekst</strong><br>
+            Bruk ft:ja for å også søke i innhold i bøker.<br>
+            Eksempel: <em ng-click="query = '&quot;drepte hunden&quot; ft:ja'">"drepte hunden" ft:ja</em>.<br><br>
+            <strong>Kombinere</strong><br>
+            Søket viser kun de første 50 treff, sortert etter utgivelsesdato (nyeste først).
+            Kombiner derfor uttrykk for å få mer presise treff.
+            Eksempel: <em ng-click="query = 'f:olsen å:2000'">f:olsen å:2000</em>.<br><br>
+        </p>
     </div>
 </section>

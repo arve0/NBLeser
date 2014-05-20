@@ -22,23 +22,55 @@ exports.tilemap = function(req,res) {
     });
 };
 
-var parseString = require('xml2js').parseString;
+var parse = require('xml2json');
 
 exports.search = function(req, res) {
-    var query = req.query.q;
-    query += ' contentClasses:bokhylla';
-    var getIndex = (req.query.index || 10);
-    var getItems = (req.query.items || 10);
-    var url = 'http://www.nb.no/services/search/v2/search?&itemsPerPage=' + getItems + '&q=' + query;
-    http.get(url,function(response){
+    /* get xml from nasjonalbiblioteket and convert to json
+    Url: http://www.nb.no/services/search/v2/search
+    Parameters:
+        q={searchTerms}
+            - field:value
+            - examples
+                * namecreators:arve (writers named arve)
+                * contentClasses:bokhylla (digital available)
+                * year:1998
+            - field/advanced search is a part of the query (parsed at client, search.client.service.js)
+        startIndex={startIndex?}
+        itemsPerPage={count?}
+        facet={nb:facetOn?} - return only specified fields
+        fq={nb:facetQuery?}
+        filter={nb:filterQuery?}
+        sort={nb:sort?}
+        qp={nb:qp?}
+        ft={nb:ft?} - full text
+        da={nb:da?}
+    */
+
+    var query = 'http://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ';
+    query += req.query.q;
+    query += '&Index=' + (req.query.index || 1);
+    query += '&itemsPerPage=' + (req.query.items || 10);
+    query += '&sort=date:desc';
+    query += (req.query.ft === '1' ? '&ft=true':'');
+
+    //console.log('getting xml', query);
+    http.get(query, function(response){
         var xml = '';
         response.on('data', function(chunk){
             xml += chunk;
         });
         response.on('end', function(){
-            parseString(xml, function (err, json) {
-                res.send(json);
-            });
+            var json, error;
+            try {
+                json = parse.toJson(xml, {coerce: false});
+            }
+            catch (e) {
+                error = e;
+            }
+            finally {
+                if (error) res.send({}, 500);
+                else res.send(json);
+            }
         });
     });
 };

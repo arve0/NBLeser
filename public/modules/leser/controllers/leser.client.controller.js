@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('leser').controller('LeserController', ['$scope', '$rootScope', 'Tilemap', '$document', '$stateParams',
-        function($scope, $rootScope, Tilemap, $document, $stateParams) {
+angular.module('leser').controller('LeserController',
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location) {
+
 
         var urn = $stateParams.urn;
-        var pagePromise = Tilemap.getPages(urn);
 
         $rootScope.controls = {};
         $rootScope.controls.show = true;
@@ -37,7 +37,8 @@ angular.module('leser').controller('LeserController', ['$scope', '$rootScope', '
             return Math.abs(windowPosition - elementPosition) < 5000;
         };
 
-        pagePromise.then(function(pages){
+        var bookPromise = Tilemap.getPages(urn);
+        bookPromise.then(function(pages){
             $scope.pages = pages;
             $rootScope.controls.levels = [];
             for (var i=0;i<pages.getNumberOfLevels();i++){
@@ -47,7 +48,10 @@ angular.module('leser').controller('LeserController', ['$scope', '$rootScope', '
             $rootScope.$watch('controls.level', function(level){
                 $scope.pages.updateLevel(level);
             });
+        }, function(error){
+            console.log(error);
+            $location.url('/');
         });
 
     }
-]);
+);

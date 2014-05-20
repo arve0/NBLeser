@@ -2,6 +2,36 @@
 .github-fork-ribbon {
   background-color: #f80;
 }
+.home {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 50%;
+  margin: 0 auto;
+}
+.home .search-input {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.home .search-input button {
+  margin-right: 4px;
+}
+.home .search-tips {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: #efefef;
+  color: 333;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid 1px;
+}
+.home .search-tips em {
+  cursor: pointer;
+}
 .content {
   margin-top: 50px;
 }
@@ -81,4 +111,60 @@
   width: 100%;
   height: auto;
   display: block;
+}
+.search-list {
+  padding-left: 0;
+}
+.search-list li.book-entry {
+  list-style: none;
+  padding: 10px;
+  margin: 5px;
+  border: solid 1px;
+  border-radius: 3px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.search-list strong {
+  padding-left: 4px;
+}
+.search-list a {
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+.search-list .details {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+.search-list .details ul {
+  padding-left: 0;
+}
+.search-list .details li {
+  list-style: none;
+}
+.search-list .details .panel-group {
+  margin-bottom: 0;
+}
+.search-list .image {
+  -webkit-box-flex: 0.15;
+  -moz-box-flex: 0.15;
+  -webkit-flex: 0.15;
+  -ms-box-flex: 0.15;
+  -ms-flex: 0.15;
+  flex: 0.15;
+  margin-right: 10px;
+  width: 50px;
+}
+.search-list .image img {
+  width: 63px;
+  height: 80px;
+  border-radius: 3px;
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 //Setting up route
-angular.module('leser').config(['$stateProvider',
+angular.module('leser').config(
 	function($stateProvider) {
 		// Leser state routing
 		$stateProvider.
@@ -10,4 +10,4 @@ angular.module('leser').config(['$stateProvider',
 			templateUrl: 'modules/leser/views/leser.client.view.html'
 		});
 	}
-]);
+);

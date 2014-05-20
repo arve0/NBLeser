@@ -7,8 +7,19 @@
     display: -webkit-flex;
     display: flex;
 }
-.github-fork-ribbon {
-    background-color: #f80;
+.flexbox-center() {
+    -moz-box-align: center;
+    -webkit-box-align: center;
+    -ms-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
 }
 .flex(@values) {
     -webkit-box-flex: @values;
@@ -22,7 +33,31 @@
     -webkit-flex-direction:@value;
     flex-direction:@value;
 }
-
+.github-fork-ribbon {
+    background-color: #f80;
+}
+.home {
+    .flexbox();
+    width:50%;
+    margin:0 auto;
+    .search-input {
+        .flexbox();
+        button {
+            margin-right:4px;
+        }
+    }
+    .search-tips {
+         font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+         background-color:#efefef;
+         color:333;
+         padding:20px;
+         border-radius:5px;
+         border:solid 1px;
+         em {
+            cursor:pointer;
+         }
+    }
+}
 .content {
 	margin-top: 50px;
 }
@@ -92,6 +127,46 @@
                 height:auto;
                 display:block;
             }
+        }
+    }
+}
+
+
+.search-list {
+    padding-left:0;
+    li.book-entry {
+        list-style:none;
+        padding:10px;
+        margin:5px;
+        border:solid 1px;
+        border-radius:3px;
+        .flexbox();
+        align-items:center;
+    }
+    strong {
+        padding-left:4px;
+    }
+    a {
+        text-decoration:none;
+        color:#333;
+        cursor:pointer;
+    }
+    .details {
+        .flex(1);
+        ul { padding-left:0; }
+        li { list-style:none; }
+        .panel-group {
+            margin-bottom:0;
+        }
+    }
+    .image {
+        .flex(0.15);
+        margin-right:10px;
+        width: 50px;
+        img {
+            width: 63px; 
+            height: 80px;
+            border-radius: 3px;
         }
     }
 }
