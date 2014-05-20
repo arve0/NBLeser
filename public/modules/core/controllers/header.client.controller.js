@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('HeaderController', ['$scope', '$rootScope', 'Menus', '$anchorScroll', '$location', 
-    function($scope, $rootScope, Menus, $anchorScroll, $location) {
+angular.module('core').controller('HeaderController', ['$scope', '$rootScope', 'Menus', '$anchorScroll', '$location', '$modal',
+    function($scope, $rootScope, Menus, $anchorScroll, $location, $modal) {
         $scope.isCollapsed = false;
         $scope.menu = Menus.getMenu('topbar');
 
@@ -14,5 +14,18 @@ angular.module('core').controller('HeaderController', ['$scope', '$rootScope', '
             $location.hash(page);
             $anchorScroll();
         };
+
+        // Terms
+        var modalInstance;
+        $scope.showTerms = function(){
+            modalInstance = $modal.open({
+              templateUrl: '/modules/core/views/terms.client.view.html',
+            });
+        };
+        // make close available at all controllers
+        $rootScope.closeTerms = function () {
+            modalInstance.close();
+        };
+
     }
 ]);

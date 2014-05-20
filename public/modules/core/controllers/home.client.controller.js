@@ -8,7 +8,6 @@ function ($scope, $location, $rootScope, $http) {
     $rootScope.controls = {};
     $rootScope.controls.show = false;
 
-
     $scope.search = function(query){
         $http.get('/search?q=' + query).success(function(data){
             var urn = data.feed.entry[0]['nb:urn'][0]._;
