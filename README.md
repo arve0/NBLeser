@@ -47,4 +47,4 @@ grunt
 Åpne nettleser og gå til http://localhost:3000/
 
 # Lisens
-MIT [les lisens](LICENSE.md)
+MIT - [les lisens](LICENSE.md)
