@@ -1,4 +1,7 @@
 /* Mixins */
+.github-fork-ribbon {
+  background-color: #f80;
+}
 .content {
   margin-top: 50px;
 }

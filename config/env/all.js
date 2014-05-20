@@ -15,6 +15,7 @@ module.exports = {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.css',
 				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				'public/lib/github-fork-ribbon-css/gh-fork-ribbon.css',
 			],
 			js: [
 				'public/lib/angular/angular.js',

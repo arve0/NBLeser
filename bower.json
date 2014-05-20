@@ -14,6 +14,6 @@
     "angular-bootstrap": "~0.10.0",
     "angular-ui-utils": "~0.1.1",
     "angular-ui-router": "~0.2.10",
-    "x2js": "*"
+    "github-fork-ribbon-css": "~0.1.0"
   }
 }
