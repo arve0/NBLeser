@@ -26,6 +26,7 @@
 }
 .home .search-tips em {
   cursor: pointer;
+  text-decoration: underline;
 }
 .content {
   margin-top: 50px;
