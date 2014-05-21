@@ -11,7 +11,8 @@ var ApplicationConfiguration = function () {
         'ngSanitize',
         'ui.router',
         'ui.bootstrap',
-        'ui.utils'
+        'ui.utils',
+        'chieffancypants.loadingBar'
       ];
     // Add a new vertical module
     var registerModule = function (moduleName) {
@@ -109,10 +110,13 @@ angular.module('core').controller('HomeController', [
       }
     };
     $scope.readFirst = function (query) {
+      $scope.error = false;
       var searchPromise = Search.get(query);
       searchPromise.then(function (data) {
         var urn = data.entry[0]['nb:urn'].$t;
         $location.url('/leser/' + urn);
+      }, function (err) {
+        $scope.error = err;
       });
     };
     $scope.search = function (query) {
@@ -355,7 +359,7 @@ angular.module('leser').controller('LeserController', [
         $scope.pages.updateLevel(level);
       });
     }, function (error) {
-      console.log(error);
+      $rootScope.error = error;
       $location.url('/');
     });
   }
@@ -408,7 +412,7 @@ angular.module('leser').factory('Tilemap', [
       var deferred = $q.defer();
       $http.get('/tilemap/' + urn).success(function (data) {
         if (!data.pages) {
-          deferred.reject('urn not found');
+          deferred.reject('Fant ikke urn: ' + urn);
         } else {
           // refactor
           angular.forEach(data.pages.pages, function (page, index) {

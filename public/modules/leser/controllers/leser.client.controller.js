@@ -49,7 +49,7 @@ angular.module('leser').controller('LeserController',
                 $scope.pages.updateLevel(level);
             });
         }, function(error){
-            console.log(error);
+            $rootScope.error = error;
             $location.url('/');
         });
 

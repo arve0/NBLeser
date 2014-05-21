@@ -15,10 +15,13 @@ function ($scope, $location, $rootScope, $http, Search, $modal) {
     };
     
     $scope.readFirst = function(query){
+        $scope.error = false;
         var searchPromise = Search.get(query);
         searchPromise.then(function(data){
             var urn = data.entry[0]['nb:urn'].$t;
             $location.url('/leser/' + urn);
+        },function(err){
+            $scope.error = err;
         });
     };
     $scope.search = function(query){

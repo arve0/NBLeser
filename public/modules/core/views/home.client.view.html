@@ -1,13 +1,17 @@
 <section data-ng-controller="HomeController" class="home">
     <div>
-        <div class="alert alert-warning" ng-if="error">{{error}}</div>
-        <div class="form-inline search-input">
-            <form ng-submit="search(query)">
-                <input type="text" ng-model="query" class="form-control" size="40">
-                <button class="btn btn-default">Søk</button>
-            </form>
-            <button class="btn btn-success" ng-click="readFirst(query)">Les første treff</button>
-            <button class="btn btn-primary" ng-click="read(query)">Les URN</button>
+        <div class="top">
+            <div class="form-inline search-input">
+                <form ng-submit="search(query)">
+                    <input type="text" ng-model="query" class="form-control" size="40">
+                </form>
+                <div>
+                    <button class="btn btn-default" ng-click="search(query)">Søk</button>
+                    <button class="btn btn-success" ng-click="readFirst(query)">Les første treff</button>
+                    <button class="btn btn-primary" ng-click="read(query)">Les URN</button>
+                </div>
+            </div>
+            <div class="alert alert-warning" ng-if="error">{{error}}</div>
         </div>
         <h3>Søketips</h3>
         <p class="search-tips">

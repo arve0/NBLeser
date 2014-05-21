@@ -16,14 +16,10 @@ Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre 
 Poengene er demonstrert her: http://youtu.be/zvQaJ54-P4s
 
 # Nåværende mangler i NBleser
-Søk etter bok:
-* Hopper kun til første treff
-* Mangler avansert søk (forfatter, år, osv)
-
-Tekstsøk i bok
+* Tekstsøk og merking i bok
 
 # Nettressurser
-Ressursene hentes av node.js ettersom nb.no ikke har satt access-control-allow-origin på nettressursene.
+Ressursene hentes av node.js ettersom nb.no ikke har access-control-allow-origin på nettressursene.
 
 OpenSearch:
 http://www.nb.no/services/search/v2/
@@ -31,7 +27,7 @@ http://www.nb.no/services/search/v2/
 Tilemap service:
 http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=
 
-Hente tiles(fra tilemap):
+Henter bilder(url fra tilemap):
 http://www.nb.no/services/image/
 
 ## Ressurser som ikke er tatt i bruk

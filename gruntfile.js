@@ -140,7 +140,7 @@ module.exports = function(grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'csslint', 'concurrent']);
+    grunt.registerTask('default', ['jshint', 'less', 'csslint', 'concurrent']);
 
     // Lint task(s).
     grunt.registerTask('lint', ['jshint', 'csslint']);

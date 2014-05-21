@@ -23,7 +23,7 @@ angular.module('leser').factory('Tilemap',
             var deferred = $q.defer();
             $http.get('/tilemap/' + urn).success(function(data){
                 if (!data.pages) {
-                    deferred.reject('urn not found');
+                    deferred.reject('Fant ikke urn: ' + urn);
                 }
                 else { // refactor
                     angular.forEach(data.pages.pages, function(page, index){
