@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('leser').controller('LeserController',
-        function($scope, $rootScope, Tilemap, $document, $stateParams, $location) {
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window) {
 
 
         var urn = $stateParams.urn;
@@ -19,7 +19,15 @@ angular.module('leser').controller('LeserController',
             $scope.width = function(){
                 return { 
                     width: value + '%',
-                    height: value + '%',
+                    height: ($window.innerHeight - 52) + 'px',
+                    };
+            };
+        });
+        angular.element($window).on('resize', function(){
+            $scope.width = function(){
+                return { 
+                    width: $scope.controls.zoom + '%',
+                    height: ($window.innerHeight - 52) + 'px',
                     };
             };
         });
@@ -27,10 +35,16 @@ angular.module('leser').controller('LeserController',
         $scope.scrollTop = {};
         $scope.scrollTop.value = 0;
 
-        $document.on('scroll', function(){
+        var book = angular.element(document.getElementsByClassName('book'));
+        book.on('scroll', function(){
             $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0)  - (this.clientTop || 0);
             $scope.$digest();
         });
+        book.on('touchstart', function(){
+            $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0)  - (this.clientTop || 0);
+            $scope.$digest();
+        });
+        
 
 
         $scope.show = function(windowPosition, elementPosition){
@@ -39,9 +53,14 @@ angular.module('leser').controller('LeserController',
 
         var bookPromise = Tilemap.getPages(urn);
         bookPromise.then(function(pages){
+            var i;
             $scope.pages = pages;
+            $rootScope.controls.pages = [];
+            for (i=1; i <= pages.length; i++){
+                $rootScope.controls.pages.push(i);
+            }
             $rootScope.controls.levels = [];
-            for (var i=0;i<pages.getNumberOfLevels();i++){
+            for (i=0;i<pages.getNumberOfLevels();i++){
                 $rootScope.controls.levels.push(i);
             }
             $scope.pages.updateLevel($rootScope.controls.level);

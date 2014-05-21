@@ -2,9 +2,12 @@
 .github-fork-ribbon {
   background-color: #f80;
 }
+.modal-content .alert {
+  margin-bottom: 0;
+}
 .home {
   width: 90%;
-  margin: 0 auto;
+  margin: 30px auto;
 }
 .home .top {
   display: -webkit-box;
@@ -35,13 +38,8 @@
   -webkit-align-items: center;
   align-items: center;
 }
-.home .search-input > * {
-  margin-right: 4px;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
+.home .search-input > form {
+  margin-right: 20px;
 }
 .home .search-input button {
   margin-right: 4px;
@@ -57,9 +55,6 @@
 .home .search-tips em {
   cursor: pointer;
   text-decoration: underline;
-}
-.content {
-  margin-top: 50px;
 }
 .undecorated-link:hover {
   text-decoration: none;
@@ -107,12 +102,38 @@
   width: 65px !important;
   margin-right: 4px;
 }
+.menu {
+  margin: 0;
+  border-radius: 0;
+}
+.ui-reset {
+  position: relative;
+  top: 3px;
+  left: 2px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 6px;
+  color: #000;
+}
+a.ui-reset:hover {
+  text-decoration: none;
+}
+.ui-reset:before {
+  content: "\e014";
+}
 .container {
   padding: 0;
   margin: 0 auto;
 }
 .book {
   margin: 0 auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 .book .page {
   display: -webkit-box;

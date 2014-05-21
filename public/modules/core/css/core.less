@@ -34,9 +34,12 @@
 .github-fork-ribbon {
     background-color: #f80;
 }
+.modal-content .alert {
+    margin-bottom:0;
+}
 .home {
     width:90%;
-    margin:0 auto;
+    margin:30px auto;
     .top {
         .flexbox();
         .flex-direction(column);
@@ -47,9 +50,8 @@
     .search-input {
         .flexbox();
         .flexbox-center();
-        > * {
-            margin-right:4px;
-            .flexbox();
+        > form {
+            margin-right:20px;
         }
         button {
             margin-right:4px;
@@ -67,9 +69,6 @@
             text-decoration:underline;
          }
     }
-}
-.content {
-	margin-top: 50px;
 }
 .undecorated-link:hover {
 	text-decoration: none;
@@ -115,13 +114,38 @@
         margin-right:4px;
     }
 }
-
+.menu {
+    margin:0;
+    border-radius:0;
+}
+.ui-reset {
+    position: relative;
+    top: 3px;
+    left: 2px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding:6px;
+    color:#000;
+}
+a.ui-reset:hover {
+    text-decoration:none;
+}
+.ui-reset:before {
+    content: "\e014";
+}
 .container {
     padding: 0;
     margin: 0 auto;
 }
 .book {
     margin:0 auto;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling: touch; // smooth scrolling ipad
     .page {
         .flexbox();
         .flex-direction(column);

@@ -9,7 +9,14 @@ angular.module('core').controller('HeaderController',
                 $scope.isCollapsed = !$scope.isCollapsed;
         };
 
-        $scope.goto = function(page) {
+        $scope.goto = function(page){
+            page = (page || $scope.controls.currentPage);
+            console.log('going to ', page);
+            if (!document.getElementById(page)) {
+                modalInstance = $modal.open({
+                    template: '<div class="alert alert-danger">Siden eksisterer ikke.</div>',
+                });
+            }
             $location.hash(page);
             $anchorScroll();
         };

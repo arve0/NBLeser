@@ -75,6 +75,11 @@ angular.module('core').controller('HeaderController', [
       $scope.isCollapsed = !$scope.isCollapsed;
     };
     $scope.goto = function (page) {
+      page = page || $scope.controls.currentPage;
+      console.log('going to ', page);
+      if (!document.getElementById(page)) {
+        modalInstance = $modal.open({ template: '<div class="alert alert-danger">Siden eksisterer ikke.</div>' });
+      }
       $location.hash(page);
       $anchorScroll();
     };
@@ -317,7 +322,8 @@ angular.module('leser').controller('LeserController', [
   '$document',
   '$stateParams',
   '$location',
-  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location) {
+  '$window',
+  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window) {
     var urn = $stateParams.urn;
     $rootScope.controls = {};
     $rootScope.controls.show = true;
@@ -334,13 +340,26 @@ angular.module('leser').controller('LeserController', [
       $scope.width = function () {
         return {
           width: value + '%',
-          height: value + '%'
+          height: $window.innerHeight - 52 + 'px'
+        };
+      };
+    });
+    angular.element($window).on('resize', function () {
+      $scope.width = function () {
+        return {
+          width: $scope.controls.zoom + '%',
+          height: $window.innerHeight - 52 + 'px'
         };
       };
     });
     $scope.scrollTop = {};
     $scope.scrollTop.value = 0;
-    $document.on('scroll', function () {
+    var book = angular.element(document.getElementsByClassName('book'));
+    book.on('scroll', function () {
+      $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
+      $scope.$digest();
+    });
+    book.on('touchstart', function () {
       $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
       $scope.$digest();
     });
@@ -349,9 +368,14 @@ angular.module('leser').controller('LeserController', [
     };
     var bookPromise = Tilemap.getPages(urn);
     bookPromise.then(function (pages) {
+      var i;
       $scope.pages = pages;
+      $rootScope.controls.pages = [];
+      for (i = 1; i <= pages.length; i++) {
+        $rootScope.controls.pages.push(i);
+      }
       $rootScope.controls.levels = [];
-      for (var i = 0; i < pages.getNumberOfLevels(); i++) {
+      for (i = 0; i < pages.getNumberOfLevels(); i++) {
         $rootScope.controls.levels.push(i);
       }
       $scope.pages.updateLevel($rootScope.controls.level);
@@ -405,6 +429,38 @@ angular.module('leser').factory('Tilemap', [
     var getNumberOfLevels = function () {
       return _pages[0].tileMap.levels.length;
     };
+    function createImageArray(level, templateUrl) {
+      // store images in 2d array for easier access
+      for (var i = 0; i < level.rows; i++) {
+        level.images.push([]);
+        for (var j = 0; j < level.columns; j++) {
+          var url = templateUrl.replace('{row}', i).replace('{column}', j);
+          level.images[i].push(url);
+        }
+      }
+      return level;
+    }
+    function processLevels(levels, pageIndex) {
+      for (var i = 0; i < levels.length; i++) {
+        var level = levels[i];
+        var templateUrl = level.uri.template;
+        level.images = [];
+        // set scale of last row/column
+        var pixels;
+        var tileHeight = _pages[pageIndex].tileMap.tileHeight;
+        var tileWidth = _pages[pageIndex].tileMap.tileWidth;
+        if (level.height > tileHeight) {
+          pixels = level.height - (level.rows - 1) * tileHeight;
+          level.lastRowScale = pixels / tileHeight;
+        }
+        if (level.width > tileWidth) {
+          pixels = level.width - (level.columns - 1) * tileWidth;
+          level.lastColumnScale = pixels / tileWidth;
+        }
+        level = createImageArray(level, templateUrl);
+      }
+      return levels;
+    }
     var getPages = function (urn) {
       _pages = [];
       _pages.updateLevel = updateLevel;
@@ -415,42 +471,24 @@ angular.module('leser').factory('Tilemap', [
           deferred.reject('Fant ikke urn: ' + urn);
         } else {
           // refactor
-          angular.forEach(data.pages.pages, function (page, index) {
-            _pages.push({
-              pageId: page.pg_id,
-              pageLabel: page.pg_label,
-              pageType: page.pg_type,
-              resolution: page.resolution,
-              tileHeight: page.tileHeight,
-              tileMap: page.tileMap.image.pyramid
-            });
-            angular.forEach(_pages[index].tileMap.levels, function (level) {
-              var templateUrl = level.uri.template;
-              level.images = [];
-              // set scale of last row/column
-              var pixels;
-              var tileHeight = _pages[index].tileMap.tileHeight;
-              var tileWidth = _pages[index].tileMap.tileWidth;
-              if (level.height > tileHeight) {
-                pixels = level.height - (level.rows - 1) * tileHeight;
-                level.lastRowScale = pixels / tileHeight;
-              }
-              if (level.width > tileWidth) {
-                pixels = level.width - (level.columns - 1) * tileWidth;
-                level.lastColumnScale = pixels / tileWidth;
-              }
-              // store images in 2d array for easier access
-              for (var i = 0; i < level.rows; i++) {
-                level.images.push([]);
-                for (var j = 0; j < level.columns; j++) {
-                  var url = templateUrl.replace('{row}', i).replace('{column}', j);
-                  level.images[i].push(url);
-                }
-              }
-            });
-          });
+          for (var i = 0; i < data.pages.pages.length; i++) {
+            var page = data.pages.pages[i];
+            if (page.pg_type === 'COVER_SPINE') {
+              break;
+            } else {
+              _pages.push({
+                pageId: page.pg_id,
+                pageLabel: page.pg_label,
+                pageType: page.pg_type,
+                resolution: page.resolution,
+                tileHeight: page.tileHeight,
+                tileMap: page.tileMap.image.pyramid
+              });
+            }
+            _pages[i].tileMap.levels = processLevels(_pages[i].tileMap.levels, i);
+          }
         }
-        deferred.resolve(_pages);
+        deferred.resolve(_pages);  //console.log(_pages);
       });
       return deferred.promise;
     };

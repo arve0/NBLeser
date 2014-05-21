@@ -31,12 +31,19 @@
                 <select ng-model="controls.zoom" class="form-control" ng-options="zoom.value as zoom.text for zoom in controls.zoomValues">
                 </select>
             </div>
+            <div class="form-inline">
+                <p>Gå til side</p>
+                <select ng-model="controls.currentPage" ng-change="goto()" ng-options="pageNumer for pageNumer in controls.pages" class="form-control">
+                </select>
+            </div>
+            <!--
             <div class="goto form-inline">
                 <form ng-submit="goto(page)">
                     <input type="number" ng-model="page" class="form-control">
                     <button class="btn btn-primary">Gå til side</button>
                 </form>
             </div>
+            -->
         </div>
     </nav>
 </div>
