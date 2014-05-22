@@ -2,6 +2,8 @@ Om
 ==
 Dette er en alternativ leser for den digitale bokhylla til Nasjonalbiblioteket. Du kan bruke leseren her: http://nbleser.heroku.com
 
+Du kan se en demo av leseren her: http://youtu.be/waUmeowGwjM
+
 Hvorfor
 =======
 Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre den. Her er noen av de tingene jeg mener ikke er optimale:
@@ -15,7 +17,7 @@ Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre 
 
 Poengene er demonstrert her: http://youtu.be/zvQaJ54-P4s
 
-# Nåværende mangler i NBleser
+# Nåværende mangler i NBLeser
 * Tekstsøk og merking i bok
 
 # Nettressurser
