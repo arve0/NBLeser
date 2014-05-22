@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="HeaderController">
+<div data-ng-controller="HeaderController">
     <div class="navbar-header">
         <button class="navbar-toggle" type="button" data-ng-click="toggleCollapsibleMenu()">
             <span class="sr-only">Toggle navigation</span>
@@ -36,14 +36,6 @@
                 <select ng-model="controls.currentPage" ng-change="goto()" ng-options="pageNumer for pageNumer in controls.pages" class="form-control">
                 </select>
             </div>
-            <!--
-            <div class="goto form-inline">
-                <form ng-submit="goto(page)">
-                    <input type="number" ng-model="page" class="form-control">
-                    <button class="btn btn-primary">Gå til side</button>
-                </form>
-            </div>
-            -->
         </div>
     </nav>
 </div>

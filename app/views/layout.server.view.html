@@ -68,11 +68,9 @@
             <a href="https://github.com/arve0/NBleser/">Fork me on GitHub</a>
         </div>
     </div>
-	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-inverse menu"></header>
+	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse menu"></header>
 	<section class="content">
-		<section class="container">
-			{% block content %}{% endblock %}
-		</section>
+            {% block content %}{% endblock %}
 	</section>
 
 	<!--Embedding The User Object-->

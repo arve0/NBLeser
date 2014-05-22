@@ -126,14 +126,8 @@ a.ui-reset:hover {
 .ui-reset:before {
   content: "\e014";
 }
-.container {
-  padding: 0;
-  margin: 0 auto;
-}
 .book {
   margin: 0 auto;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
 }
 .book .page {
   display: -webkit-box;

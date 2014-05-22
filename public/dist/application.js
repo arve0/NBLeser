@@ -354,12 +354,11 @@ angular.module('leser').controller('LeserController', [
     });
     $scope.scrollTop = {};
     $scope.scrollTop.value = 0;
-    var book = angular.element(document.getElementsByClassName('book'));
-    book.on('scroll', function () {
+    $document.on('scroll', function () {
       $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
       $scope.$digest();
     });
-    book.on('touchstart', function () {
+    $document.on('touchstart', function () {
       $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
       $scope.$digest();
     });
@@ -374,6 +373,7 @@ angular.module('leser').controller('LeserController', [
       for (i = 1; i <= pages.length; i++) {
         $rootScope.controls.pages.push(i);
       }
+      $rootScope.controls.currentPage = 1;
       $rootScope.controls.levels = [];
       for (i = 0; i < pages.getNumberOfLevels(); i++) {
         $rootScope.controls.levels.push(i);

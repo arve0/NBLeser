@@ -95,7 +95,9 @@ module.exports = function(grunt) {
             dev: {
                 script: 'server.js',
                 options: {
-                    nodeArgs: ['--debug']
+                    nodeArgs: ['--debug'],
+                    ext: 'js html',
+                    ignore: ['node_modules/**']
                 }
             }
         },
