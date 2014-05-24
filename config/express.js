@@ -41,6 +41,8 @@ module.exports = function() {
 		level: 9
 	}));
 
+        // trust proxy
+        app.enable('trust proxy');
 	// Showing stack errors
 	app.set('showStackError', true);
 
