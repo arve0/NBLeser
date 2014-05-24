@@ -6,4 +6,5 @@ module.exports = function(app) {
 	app.route('/').get(core.index);
 	app.route('/tilemap/:urn').get(core.tilemap);
 	app.route('/search').get(core.search);
+	app.route('/geoip').get(core.geoip);
 };

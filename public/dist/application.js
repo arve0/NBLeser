@@ -114,6 +114,18 @@ angular.module('core').controller('HomeController', [
         modalInstance.close();
       }
     };
+    // check country
+    $http.get('/geoip').success(function (geoip) {
+      if (geoip.error) {
+        console.log(geoip.error);
+      }
+      if (geoip.country !== 'NO') {
+        modalInstance = $modal.open({
+          templateUrl: '/modules/core/views/norwegian-modal.client.view.html',
+          scope: $scope
+        });
+      }
+    });
     $scope.readFirst = function (query) {
       $scope.error = false;
       var searchPromise = Search.get(query);
@@ -139,7 +151,7 @@ angular.module('core').controller('HomeController', [
         $scope.error = error;
       });
     };
-    $scope.closeSearchModal = function () {
+    $scope.closeModal = function () {
       modalInstance.close();
     };
   }

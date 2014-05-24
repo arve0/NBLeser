@@ -13,6 +13,19 @@ function ($scope, $location, $rootScope, $http, Search, $modal) {
             modalInstance.close();
         }
     };
+
+    // check country
+    $http.get('/geoip').success(function(geoip){
+        if (geoip.error) {
+            console.log(geoip.error);
+        }
+        if (geoip.country !== 'NO') {
+            modalInstance = $modal.open({
+                templateUrl: '/modules/core/views/norwegian-modal.client.view.html',
+                scope: $scope,
+            });
+        }
+    });
     
     $scope.readFirst = function(query){
         $scope.error = false;
@@ -39,7 +52,7 @@ function ($scope, $location, $rootScope, $http, Search, $modal) {
             $scope.error = error;
         });
     };
-    $scope.closeSearchModal = function () {
+    $scope.closeModal = function () {
         modalInstance.close();
     };
 });

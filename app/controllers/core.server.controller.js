@@ -74,3 +74,17 @@ exports.search = function(req, res) {
         });
     });
 };
+
+/* GeoIP lite country */
+var geoip = require('geoip-lite-country');
+
+exports.geoip = function(req, res) {
+    var geo = geoip.lookup(req.ip);
+    if (geo === null) {
+        res.send({ error: req.ip + ' not found in geoip database.' });
+    }
+    else {
+        geo.ip = req.ip;
+        res.send(geo);
+    }
+};
