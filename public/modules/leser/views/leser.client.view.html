@@ -1,12 +1,11 @@
 <section data-ng-controller="LeserController">
-    <div class="book" ng-style="width()">
-        <div ng-repeat="page in pages" id="{{$index + 1}}" class="page" page-height>
-            <div ng-repeat="row in page.currentLevel.images" class="tile-row">
-                <img ng-repeat="image in row" ng-if="show(scrollTop.value, page.offsetTop)"
-                     style="-webkit-flex:{{$last && page.currentLevel.lastColumnScale ? page.currentLevel.lastColumnScale : 1}}"
-                     ng-src="{{image}}" />
+    <div class="book" book-width="controls.zoom">
+        <div ng-repeat="page in pages" id="p{{$index + 1}}" page-height zoom="controls.zoom" class="loading">
+            <div class="page" ng-if="page.show">
+                <div ng-repeat="row in page.currentLevel.images" class="tile-row">
+                    <img ng-repeat="image in row" ng-src="{{image}}" scale-image />
                 </div>
-            </div>
+            </div><!--show-page-->
         </div>
     </div>
 </section>

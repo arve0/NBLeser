@@ -1,25 +1,15 @@
 'use strict';
 
 angular.module('core').controller('HeaderController',
-    function($scope, Menus, $anchorScroll, $location, $modal) {
+    function($scope, Menus, $anchorScroll, $location, $modal, ReaderControls) {
         $scope.isCollapsed = false;
         $scope.menu = Menus.getMenu('topbar');
 
         $scope.toggleCollapsibleMenu = function() {
                 $scope.isCollapsed = !$scope.isCollapsed;
         };
-
-        $scope.goto = function(page){
-            page = (page || $scope.controls.currentPage);
-            console.log('going to ', page);
-            if (!document.getElementById(page)) {
-                modalInstance = $modal.open({
-                    template: '<div class="alert alert-danger">Siden eksisterer ikke.</div>',
-                });
-            }
-            $location.hash(page);
-            $anchorScroll();
-        };
+        
+        $scope.controls = ReaderControls;
 
         // Terms
         var modalInstance;

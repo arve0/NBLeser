@@ -1,49 +1,14 @@
 'use strict';
 
 angular.module('leser').controller('LeserController',
-        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window, ipCookie) {
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window, ReaderControls) {
+
+        $rootScope.error = ''; // reset error messages
         
         var urn = $stateParams.urn;
 
-        $rootScope.controls = {};
-        $rootScope.controls.show = true;
-        $rootScope.controls.level = 5;
-        $rootScope.controls.zoom = ipCookie('zoom') || 100;
-        $rootScope.controls.zoomValues = [];
-        for (var z=10; z<=100; z+=10){
-            $rootScope.controls.zoomValues.push({value: z, text: z + '%'});
-        }
-
-        $rootScope.$watch('controls.zoom', function(value){
-            ipCookie('zoom', value, {expires: 365});
-            $scope.width = function(){
-                return { 
-                    width: value + '%',
-                    height: ($window.innerHeight - 52) + 'px',
-                    };
-            };
-        });
-        angular.element($window).on('resize', function(){
-            $scope.width = function(){
-                return { 
-                    width: $scope.controls.zoom + '%',
-                    height: ($window.innerHeight - 52) + 'px',
-                    };
-            };
-        });
-
-        $scope.scrollTop = {};
-        $scope.scrollTop.value = 0;
-
-        $document.on('scroll', function(){
-            $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0)  - (this.clientTop || 0);
-            $scope.$digest();
-        });
-        $document.on('touchstart', function(){
-            $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0)  - (this.clientTop || 0);
-            $scope.$digest();
-        });
-        
+        $scope.controls = ReaderControls;
+        $scope.controls.show = true;
 
 
         $scope.show = function(windowPosition, elementPosition){
@@ -54,17 +19,14 @@ angular.module('leser').controller('LeserController',
         bookPromise.then(function(pages){
             var i;
             $scope.pages = pages;
-            $rootScope.controls.pages = [];
-            for (i=1; i <= pages.length; i++){
-                $rootScope.controls.pages.push(i);
-            }
-            $rootScope.controls.currentPage = 1;
-            $rootScope.controls.levels = [];
+            $scope.controls.currentPage = $location.hash() || 1;
+            $scope.controls.pages = pages.length;
+            $scope.controls.firstRun = true;
             for (i=0;i<pages.getNumberOfLevels();i++){
-                $rootScope.controls.levels.push(i);
+                $scope.controls.levels.push(i);
             }
-            $scope.pages.updateLevel($rootScope.controls.level);
-            $rootScope.$watch('controls.level', function(level){
+            $scope.pages.updateLevel($scope.controls.level);
+            $scope.$watch('controls.level', function(level){
                 $scope.pages.updateLevel(level);
             });
         }, function(error){

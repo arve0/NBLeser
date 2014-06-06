@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('core').controller('HomeController',
-function ($scope, $location, $rootScope, $http, Search, $modal) {
+function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls) {
     // variables
     var modalInstance;
-    $rootScope.controls = {};
-    $rootScope.controls.show = false;
+    ReaderControls.show = false; // hide controls in home view
+    $rootScope.error = ''; // reset any error messages
 
     $scope.read = function(urn, close){
         $location.url('/leser/' + urn);
