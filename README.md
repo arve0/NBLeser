@@ -1,14 +1,16 @@
 Om
 ==
-Dette er en alternativ leser for den digitale bokhylla til Nasjonalbiblioteket. Du kan bruke leseren her: http://nbleser.heroku.com
+Dette er en alternativ leser for ebøkene på den digitale bokhylla til Nasjonalbiblioteket. Fra bokhylla kan du streame/lese over 170 tusen norske bøker, helt gratis! Du kan bruke leseren her: http://nbleser.herokuapp.com
 
-Du kan se en demo av leseren her: http://youtu.be/waUmeowGwjM
+Her er en demovideo av leseren: http://youtu.be/waUmeowGwjM
 
 Hvorfor
 =======
 Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre den. Her er noen av de tingene jeg mener ikke er optimale:
 
-* Kræsjer ofte - ubrukelig på iPad
+* Kræsjer ofte 
+    - ubrukelig på iPad 
+    - er på grunn av minnelekasje ved CSS overflow-y og -webkit-overflow-scrolling touch på iOS
 * Dårlige muligheter for zoom
 * Dårlig kontroll over kvalitet
 * Ikke tilpasset fullscreen for iPad
@@ -19,6 +21,7 @@ Poengene er demonstrert her: http://youtu.be/zvQaJ54-P4s
 
 # Nåværende mangler i NBLeser
 * Tekstsøk og merking i bok
+[Les TODO](TODO.md)
 
 # Nettressurser
 Ressursene hentes av node.js ettersom nb.no ikke har access-control-allow-origin på nettressursene.
