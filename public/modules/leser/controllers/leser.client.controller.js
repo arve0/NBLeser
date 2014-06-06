@@ -1,21 +1,21 @@
 'use strict';
 
 angular.module('leser').controller('LeserController',
-        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window) {
-
-
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window, ipCookie) {
+        
         var urn = $stateParams.urn;
 
         $rootScope.controls = {};
         $rootScope.controls.show = true;
         $rootScope.controls.level = 5;
-        $rootScope.controls.zoom = 100;
+        $rootScope.controls.zoom = ipCookie('zoom') || 100;
         $rootScope.controls.zoomValues = [];
         for (var z=10; z<=100; z+=10){
             $rootScope.controls.zoomValues.push({value: z, text: z + '%'});
         }
 
         $rootScope.$watch('controls.zoom', function(value){
+            ipCookie('zoom', value, {expires: 365});
             $scope.width = function(){
                 return { 
                     width: value + '%',

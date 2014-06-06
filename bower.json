@@ -7,7 +7,6 @@
     "angular": "~1.2",
     "angular-resource": "~1.2",
     "angular-mocks": "~1.2",
-    "angular-cookies": "~1.2",
     "angular-animate": "~1.2",
     "angular-touch": "~1.2",
     "angular-sanitize": "~1.2",
@@ -15,6 +14,7 @@
     "angular-ui-utils": "~0.1.1",
     "angular-ui-router": "~0.2.10",
     "github-fork-ribbon-css": "~0.1.0",
-    "angular-spinner-loading": "*"
+    "angular-spinner-loading": "*",
+    "angular-cookie": "~4.0.0"
   }
 }
