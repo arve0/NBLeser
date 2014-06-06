@@ -43,6 +43,7 @@ function ($scope, $location, $rootScope, $http, Search, $modal) {
         var searchPromise = Search.get(query);
         searchPromise.then(function(data){
             $scope.searchResults.push(data);
+            //console.log(data);
             modalInstance = $modal.open({
                 size: 'lg',
                 templateUrl: '/modules/core/views/search-modal.client.view.html',

@@ -62,7 +62,7 @@ exports.search = function(req, res) {
         response.on('end', function(){
             var json, error;
             try {
-                json = parse.toJson(xml, {coerce: false});
+                json = parse.toJson(xml, {coerce: false, sanitize: false});
             }
             catch (e) {
                 error = e;

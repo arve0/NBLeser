@@ -1,5 +1,3 @@
-Flytt favicon
-
 Forstørrelsesglass til venstre i søkefelt
 
 ISBN
@@ -28,4 +26,3 @@ Reduce number of bindings
     - Show/hide based on current page number (one below, one before)
 
 BUG: Fant ikke URN etter lesning. (ikke resatt?)
-BUG: søk på økonomi -> &quot; istedenfor ", &apos;
