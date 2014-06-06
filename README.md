@@ -21,6 +21,7 @@ Poengene er demonstrert her: http://youtu.be/zvQaJ54-P4s
 
 # Nåværende mangler i NBLeser
 * Tekstsøk og merking i bok
+
 [Les TODO](TODO.md)
 
 # Nettressurser
