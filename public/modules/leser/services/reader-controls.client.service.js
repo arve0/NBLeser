@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('core').factory('ReaderControls',
+angular.module('leser').factory('ReaderControls',
 function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
 
     var _zoomValues = [];

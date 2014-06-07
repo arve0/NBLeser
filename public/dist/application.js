@@ -5,7 +5,7 @@ var ApplicationConfiguration = function () {
     var applicationModuleName = 'nbleser';
     var applicationModuleVendorDependencies = [
         'ngResource',
-        'ngCookies',
+        'ipCookie',
         'ngAnimate',
         'ngTouch',
         'ngSanitize',
@@ -68,21 +68,14 @@ angular.module('core').controller('HeaderController', [
   '$anchorScroll',
   '$location',
   '$modal',
-  function ($scope, Menus, $anchorScroll, $location, $modal) {
+  'ReaderControls',
+  function ($scope, Menus, $anchorScroll, $location, $modal, ReaderControls) {
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
     $scope.toggleCollapsibleMenu = function () {
       $scope.isCollapsed = !$scope.isCollapsed;
     };
-    $scope.goto = function (page) {
-      page = page || $scope.controls.currentPage;
-      console.log('going to ', page);
-      if (!document.getElementById(page)) {
-        modalInstance = $modal.open({ template: '<div class="alert alert-danger">Siden eksisterer ikke.</div>' });
-      }
-      $location.hash(page);
-      $anchorScroll();
-    };
+    $scope.controls = ReaderControls;
     // Terms
     var modalInstance;
     $scope.showTerms = function () {
@@ -103,11 +96,14 @@ angular.module('core').controller('HomeController', [
   '$http',
   'Search',
   '$modal',
-  function ($scope, $location, $rootScope, $http, Search, $modal) {
+  'ReaderControls',
+  function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls) {
     // variables
     var modalInstance;
-    $rootScope.controls = {};
-    $rootScope.controls.show = false;
+    ReaderControls.show = false;
+    // hide controls in home view
+    $rootScope.error = '';
+    // reset any error messages
     $scope.read = function (urn, close) {
       $location.url('/leser/' + urn);
       if (close) {
@@ -142,6 +138,7 @@ angular.module('core').controller('HomeController', [
       var searchPromise = Search.get(query);
       searchPromise.then(function (data) {
         $scope.searchResults.push(data);
+        //console.log(data);
         modalInstance = $modal.open({
           size: 'lg',
           templateUrl: '/modules/core/views/search-modal.client.view.html',
@@ -153,6 +150,18 @@ angular.module('core').controller('HomeController', [
     };
     $scope.closeModal = function () {
       modalInstance.close();
+    };
+  }
+]);'use strict';
+angular.module('core').directive('focusMe', [
+  '$timeout',
+  function ($timeout) {
+    return {
+      link: function (scope, element) {
+        $timeout(function () {
+          element[0].focus();
+        }, 500);
+      }
     };
   }
 ]);'use strict';
@@ -335,63 +344,35 @@ angular.module('leser').controller('LeserController', [
   '$stateParams',
   '$location',
   '$window',
-  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window) {
+  'ReaderControls',
+  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window, ReaderControls) {
+    $rootScope.error = '';
+    // reset error messages
     var urn = $stateParams.urn;
-    $rootScope.controls = {};
-    $rootScope.controls.show = true;
-    $rootScope.controls.level = 5;
-    $rootScope.controls.zoom = 100;
-    $rootScope.controls.zoomValues = [];
-    for (var z = 10; z <= 100; z += 10) {
-      $rootScope.controls.zoomValues.push({
-        value: z,
-        text: z + '%'
-      });
-    }
-    $rootScope.$watch('controls.zoom', function (value) {
-      $scope.width = function () {
-        return {
-          width: value + '%',
-          height: $window.innerHeight - 52 + 'px'
-        };
-      };
-    });
-    angular.element($window).on('resize', function () {
-      $scope.width = function () {
-        return {
-          width: $scope.controls.zoom + '%',
-          height: $window.innerHeight - 52 + 'px'
-        };
-      };
-    });
-    $scope.scrollTop = {};
-    $scope.scrollTop.value = 0;
+    $scope.controls = ReaderControls;
+    $scope.controls.show = true;
+    $scope.scrollTop = 0;
+    // initial position
     $document.on('scroll', function () {
-      $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
+      $scope.scrollTop = window.pageYOffset;
       $scope.$digest();
     });
     $document.on('touchstart', function () {
-      $scope.scrollTop.value = (window.pageYOffset || this.scrollTop || 0) - (this.clientTop || 0);
+      $scope.scrollTop = window.pageYOffset;
       $scope.$digest();
     });
-    $scope.show = function (windowPosition, elementPosition) {
-      return Math.abs(windowPosition - elementPosition) < 5000;
-    };
     var bookPromise = Tilemap.getPages(urn);
     bookPromise.then(function (pages) {
       var i;
       $scope.pages = pages;
-      $rootScope.controls.pages = [];
-      for (i = 1; i <= pages.length; i++) {
-        $rootScope.controls.pages.push(i);
-      }
-      $rootScope.controls.currentPage = 1;
-      $rootScope.controls.levels = [];
+      $scope.controls.currentPage = $location.hash() || 1;
+      $scope.controls.pages = pages.length;
+      $scope.controls.firstRun = true;
       for (i = 0; i < pages.getNumberOfLevels(); i++) {
-        $rootScope.controls.levels.push(i);
+        $scope.controls.levels.push(i);
       }
-      $scope.pages.updateLevel($rootScope.controls.level);
-      $rootScope.$watch('controls.level', function (level) {
+      $scope.pages.updateLevel($scope.controls.level);
+      $scope.$watch('controls.level', function (level) {
         $scope.pages.updateLevel(level);
       });
     }, function (error) {
@@ -400,31 +381,157 @@ angular.module('leser').controller('LeserController', [
     });
   }
 ]);'use strict';
+angular.module('leser').directive('bookWidth', function () {
+  return {
+    link: function postLink(scope, element, attrs) {
+      // Book-width directive logic
+      var width = scope.$eval(attrs.bookWidth);
+      element.css('width', width + '%');
+      scope.$watch(attrs.bookWidth, function updateWidth(value) {
+        width = value;
+        element.css('width', width + '%');
+      });
+    }
+  };
+});'use strict';
 angular.module('leser').directive('pageHeight', [
   '$timeout',
-  function ($timeout) {
+  '$document',
+  '$window',
+  function ($timeout, $document, $window) {
+    // internal variables
+    var _position = 0;
+    var _windowHeight = $window.innerHeight;
+    var _windowWidth = $window.innerWidth;
     return {
       link: function postLink(scope, element, attrs) {
-        // set height of each page manual
+        // set height of each page manually
         // such that div take up space, even if its not containing images
+        // and also, such that images scales
         function setHeight() {
           if (scope.page.currentLevel) {
-            // only do stuff if we're in the right scope
-            var realWidth = element.prop('offsetWidth');
+            // only do stuff if we've got data
+            var realWidth = _windowWidth * scope.$eval(attrs.zoom) / 100;
             var sourceWidth = scope.page.currentLevel.width;
-            var zoom = realWidth / sourceWidth;
-            var height = Math.ceil(scope.page.currentLevel.height * zoom);
+            var scale = realWidth / sourceWidth;
+            var height = Math.ceil(scope.page.currentLevel.height * scale);
             element.css('height', height + 'px');
             // store offsetTop to the page json
-            scope.page.offsetTop = element.prop('offsetTop');
+            scope.page.offsetTop = _position;
+            _position += height;
+            scope.page.offsetBottom = _position;
           }
         }
-        scope.$watch('controls.zoom', function () {
-          // let browser get time to resize images before height is set
-          $timeout(setHeight);
+        scope.$watch(attrs.zoom, function () {
+          if (scope.$index === 0)
+            _position = 0;
+          // reset position
+          setHeight();
         });
       }
     };
+  }
+]);'use strict';
+angular.module('leser').directive('scaleImage', function () {
+  return {
+    link: function postLink(scope, element, attrs) {
+      // use flexbox to scale images
+      var scale;
+      if (scope.$last) {
+        scale = scope.page.currentLevel.lastColumnScale;
+        element.css('-webkit-box-flex', scale);
+        element.css('-moz-box-flex', scale);
+        element.css('-ms-box-flex', scale);
+        element.css('-webkit-flex', scale);
+        element.css('-ms-flex', scale);
+        element.css('flex', scale);
+      } else
+        element.css('-webkit-flex', 1);
+    }
+  };
+});'use strict';
+angular.module('leser').directive('scaleRow', function () {
+  return {
+    link: function postLink(scope, element, attrs) {
+      // use flexbox to scale images
+      var scale;
+      if (scope.$last) {
+        scale = scope.page.currentLevel.lastRowScale;
+        element.css('-webkit-box-flex', scale);
+        element.css('-moz-box-flex', scale);
+        element.css('-ms-box-flex', scale);
+        element.css('-webkit-flex', scale);
+        element.css('-ms-flex', scale);
+        element.css('flex', scale);
+      } else
+        element.css('-webkit-flex', 1);
+    }
+  };
+});'use strict';
+angular.module('leser').factory('ReaderControls', [
+  '$location',
+  '$anchorScroll',
+  '$modal',
+  'ipCookie',
+  '$window',
+  '$rootScope',
+  function ($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
+    var _zoomValues = [];
+    for (var i = 10; i < 101; i += 10) {
+      _zoomValues.push({
+        value: i,
+        text: i + '%'
+      });
+    }
+    var _windowHeight = $window.innerHeight;
+    var _controls = {
+        currentPage: 1,
+        pages: 1,
+        pageList: [],
+        firstRun: true,
+        levels: [],
+        show: false,
+        level: 5,
+        zoomValues: _zoomValues,
+        zoom: ipCookie('zoom') || 100,
+        goto: function () {
+          // goes to currentPage
+          var id = 'p' + this.currentPage;
+          console.log(id);
+          if (!document.getElementById(id)) {
+            var modalInstance = $modal.open({ template: '<div class="alert alert-danger">Finner ikke siden.</div>' });
+          } else {
+            $location.hash(id);
+            $anchorScroll();
+          }
+        },
+        showPage: function (windowPageYOffset, elementTopOffset, elementBottomOffset) {
+          if (Math.abs(windowPageYOffset - elementTopOffset) > 5000)
+            return false;  // short curcuit
+          else {
+            return Math.abs(windowPageYOffset - elementTopOffset) < _windowHeight || Math.abs(windowPageYOffset - elementBottomOffset) < _windowHeight || elementTopOffset - windowPageYOffset < 0 && windowPageYOffset + _windowHeight - elementBottomOffset < 0;  // AND bottom under view
+          }
+        }
+      };
+    // update cookie when zoom updates
+    $rootScope.$watch(function () {
+      return _controls.zoom;
+    }, function (newValue, oldValue) {
+      ipCookie('zoom', newValue, { expires: 365 });
+    });
+    // update pageList when pages updates
+    $rootScope.$watch(function () {
+      return _controls.pages;
+    }, function (pages, oldValue) {
+      if (pages !== oldValue) {
+        _controls.pageList = [];
+        for (var i = 1; i <= pages; i++) {
+          _controls.pageList.push(i);
+        }
+      }
+    });
+    // Public API
+    return _controls;
   }
 ]);'use strict';
 angular.module('leser').factory('Tilemap', [
