@@ -361,9 +361,9 @@ angular.module('leser').controller('LeserController', [
   '$document',
   '$stateParams',
   '$location',
-  '$window',
   'ReaderControls',
-  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, $window, ReaderControls) {
+  '$timeout',
+  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout) {
     $rootScope.error = '';
     // reset error messages
     var urn = $stateParams.urn;
@@ -373,7 +373,17 @@ angular.module('leser').controller('LeserController', [
     // initial position
     $document.on('scroll', function () {
       $scope.scrollTop = window.pageYOffset;
-      $scope.$digest();
+      if ($scope.pages) {
+        // wait for data
+        for (var i = 0; i < $scope.pages.length; i++) {
+          if ($scope.scrollTop < $scope.pages[i].offsetTop) {
+            // we are past page
+            $scope.controls.currentPage = $scope.controls.pageList[i - 1];
+            break;
+          }
+        }
+      }
+      $rootScope.$digest();
     });
     $document.on('touchstart', function () {
       $scope.scrollTop = window.pageYOffset;
@@ -383,13 +393,19 @@ angular.module('leser').controller('LeserController', [
     bookPromise.then(function (pages) {
       var i;
       $scope.pages = pages;
-      $scope.controls.currentPage = $location.hash() || 1;
       $scope.controls.pages = pages.length;
       $scope.controls.firstRun = true;
       $scope.controls.levels = pages.getNumberOfLevels();
       $scope.pages.updateLevel($scope.controls.level);
       $scope.$watch('controls.level', function (level) {
         $scope.pages.updateLevel(level);
+      });
+      $timeout(function () {
+        var page = $location.hash().replace(/^p/, '');
+        if (page) {
+          $scope.controls.currentPage = $scope.controls.pageList[page - 1];
+          $scope.controls.goto();
+        }
       });
     }, function (error) {
       $rootScope.error = error;
@@ -499,7 +515,8 @@ angular.module('leser').factory('ReaderControls', [
   'ipCookie',
   '$window',
   '$rootScope',
-  function ($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
+  '$timeout',
+  function ($location, $anchorScroll, $modal, ipCookie, $window, $rootScope, $timeout) {
     var _zoomValues = [];
     for (var i = 10; i < 101; i += 10) {
       _zoomValues.push({
@@ -508,10 +525,11 @@ angular.module('leser').factory('ReaderControls', [
       });
     }
     var _windowHeight = $window.innerHeight;
+    var _pageList = [1];
     var _controls = {
-        currentPage: 1,
         pages: 1,
-        pageList: [],
+        pageList: _pageList,
+        currentPage: _pageList[0],
         firstRun: true,
         level: ipCookie('level') || 5,
         levels: 6,
@@ -529,12 +547,11 @@ angular.module('leser').factory('ReaderControls', [
         goto: function () {
           // goes to currentPage
           var id = 'p' + this.currentPage;
-          console.log(id);
           if (!document.getElementById(id)) {
             var modalInstance = $modal.open({ template: '<div class="alert alert-danger">Finner ikke siden.</div>' });
           } else {
             $location.hash(id);
-            $anchorScroll();
+            $timeout($anchorScroll);
           }
         },
         showPage: function (windowPageYOffset, elementTopOffset, elementBottomOffset) {
@@ -562,10 +579,12 @@ angular.module('leser').factory('ReaderControls', [
       return _controls.pages;
     }, function (pages, oldValue) {
       if (pages !== oldValue) {
-        _controls.pageList = [];
+        _pageList = [];
         for (var i = 1; i <= pages; i++) {
-          _controls.pageList.push(i);
+          _pageList.push(i);
         }
+        _controls.pageList = _pageList;
+        _controls.currentPage = _pageList[0];
       }
     });
     // update levelList when levels updates

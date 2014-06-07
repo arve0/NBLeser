@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('leser').factory('ReaderControls',
-function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
+function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope, $timeout) {
 
     var _zoomValues = [];
     for (var i=10;i<101;i+=10){
@@ -9,11 +9,12 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
     }
 
     var _windowHeight = $window.innerHeight;
+    var _pageList = [1];
 
     var _controls = {
-        currentPage: 1,
         pages: 1,
-        pageList: [],
+        pageList: _pageList,
+        currentPage: _pageList[0],
         firstRun: true,
         level: ipCookie('level') || 5,
         levels: 6,
@@ -24,7 +25,6 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
         goto: function() {
             // goes to currentPage
             var id = 'p' + this.currentPage;
-            console.log(id);
             if (!document.getElementById(id)) {
                 var modalInstance = $modal.open({
                     template: '<div class="alert alert-danger">Finner ikke siden.</div>',
@@ -32,7 +32,7 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
             }
             else {
                 $location.hash(id);
-                $anchorScroll();
+                $timeout($anchorScroll);
             }
         },
         showPage: function(windowPageYOffset, elementTopOffset, elementBottomOffset){
@@ -66,10 +66,12 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
         return _controls.pages;
     }, function(pages, oldValue){
         if (pages !== oldValue){
-            _controls.pageList = [];
+            _pageList = [];
             for (var i=1; i <= pages; i++){
-                _controls.pageList.push(i);
+                _pageList.push(i);
             }
+            _controls.pageList = _pageList;
+            _controls.currentPage = _pageList[0];
         }
     });
 
