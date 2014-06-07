@@ -33,6 +33,13 @@ angular.module('leser').directive('pageHeight',
                     if (scope.$index === 0) _position=0; // reset position
                     setHeight();
                 });
+
+                angular.element($window).on('resize', function(){
+                    if (scope.$index === 0) _position=0; // reset position
+                    _windowHeight = $window.innerHeight;
+                    _windowWidth = $window.innerWidth;
+                    setHeight();
+                });
             }
         };
     }
