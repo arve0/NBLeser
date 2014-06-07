@@ -5,7 +5,6 @@ function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls) 
     // variables
     var modalInstance;
     ReaderControls.show = false; // hide controls in home view
-    $rootScope.error = ''; // reset any error messages
 
     $scope.read = function(urn, close){
         $location.url('/leser/' + urn);
