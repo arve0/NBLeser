@@ -11,6 +11,17 @@
   background-position: 50% 50%;
   background-size: 10%;
 }
+.history {
+  color: #c0c0c0;
+  font-size: 20px;
+  float: left;
+  padding: 12px 0;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.history:hover {
+  color: #fff;
+}
 .home {
   width: 90%;
   margin: 30px auto;

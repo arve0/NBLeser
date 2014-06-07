@@ -24,5 +24,3 @@ Resize -> setPageHeight
 Reduce number of bindings
 - Use div inside page
     - Show/hide based on current page number (one below, one before)
-
-BUG: Fant ikke URN etter lesning. (ikke resatt?)
