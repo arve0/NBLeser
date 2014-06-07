@@ -16,11 +16,3 @@ Infoknapp i leser
 - Med samme info som i søket
 
 Et treff -> les bok
-
-Gammel flex syntax
-
-Resize -> setPageHeight
-
-Reduce number of bindings
-- Use div inside page
-    - Show/hide based on current page number (one below, one before)
