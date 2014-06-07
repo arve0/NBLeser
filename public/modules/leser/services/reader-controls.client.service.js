@@ -15,9 +15,10 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
         pages: 1,
         pageList: [],
         firstRun: true,
-        levels: [],
+        level: ipCookie('level') || 5,
+        levels: 6,
+        levelList: [0,1,2,3,4,5],
         show: false,
-        level: 5,
         zoomValues: _zoomValues,
         zoom: ipCookie('zoom') || 100,
         goto: function() {
@@ -46,6 +47,13 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
     };
 
 
+    // update cookie when quality level updates
+    $rootScope.$watch(function(){
+        return _controls.level;
+    }, function(newValue, oldValue){
+        ipCookie('level', newValue, {expires: 365});
+    });
+
     // update cookie when zoom updates
     $rootScope.$watch(function(){
         return _controls.zoom;
@@ -64,6 +72,20 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
             }
         }
     });
+
+    // update levelList when levels updates
+    $rootScope.$watch(function(){
+        return _controls.levels;
+    }, function(levels, oldValue){
+        if (levels !== oldValue){
+            _controls.levelList = [];
+            for (var i=0; i < levels; i++){
+                _controls.levelList.push(i);
+            }
+            if ((levels-1) < _controls.level) _controls.level = levels-1;
+        }
+    });
+    
 
     // Public API
     return _controls;

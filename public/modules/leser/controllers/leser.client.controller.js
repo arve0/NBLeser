@@ -28,9 +28,7 @@ angular.module('leser').controller('LeserController',
             $scope.controls.currentPage = $location.hash() || 1;
             $scope.controls.pages = pages.length;
             $scope.controls.firstRun = true;
-            for (i=0;i<pages.getNumberOfLevels();i++){
-                $scope.controls.levels.push(i);
-            }
+            $scope.controls.levels = pages.getNumberOfLevels();
             $scope.pages.updateLevel($scope.controls.level);
             $scope.$watch('controls.level', function(level){
                 $scope.pages.updateLevel(level);
