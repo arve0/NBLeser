@@ -102,8 +102,6 @@ angular.module('core').controller('HomeController', [
     var modalInstance;
     ReaderControls.show = false;
     // hide controls in home view
-    $rootScope.error = '';
-    // reset any error messages
     $scope.read = function (urn, close) {
       $location.url('/leser/' + urn);
       if (close) {
@@ -161,6 +159,26 @@ angular.module('core').directive('focusMe', [
         $timeout(function () {
           element[0].focus();
         }, 500);
+      }
+    };
+  }
+]);'use strict';
+angular.module('core').directive('history', [
+  '$window',
+  function ($window) {
+    return {
+      link: function postLink(scope, element, attrs) {
+        if (attrs.history === 'forward') {
+          element.addClass('glyphicon glyphicon-chevron-right history');
+          element.on('click', function () {
+            $window.history.forward();
+          });
+        } else {
+          element.addClass('glyphicon glyphicon-chevron-left history');
+          element.on('click', function () {
+            $window.history.back();
+          });
+        }
       }
     };
   }
@@ -368,9 +386,7 @@ angular.module('leser').controller('LeserController', [
       $scope.controls.currentPage = $location.hash() || 1;
       $scope.controls.pages = pages.length;
       $scope.controls.firstRun = true;
-      for (i = 0; i < pages.getNumberOfLevels(); i++) {
-        $scope.controls.levels.push(i);
-      }
+      $scope.controls.levels = pages.getNumberOfLevels();
       $scope.pages.updateLevel($scope.controls.level);
       $scope.$watch('controls.level', function (level) {
         $scope.pages.updateLevel(level);
@@ -426,6 +442,14 @@ angular.module('leser').directive('pageHeight', [
           if (scope.$index === 0)
             _position = 0;
           // reset position
+          setHeight();
+        });
+        angular.element($window).on('resize', function () {
+          if (scope.$index === 0)
+            _position = 0;
+          // reset position
+          _windowHeight = $window.innerHeight;
+          _windowWidth = $window.innerWidth;
           setHeight();
         });
       }
@@ -489,9 +513,17 @@ angular.module('leser').factory('ReaderControls', [
         pages: 1,
         pageList: [],
         firstRun: true,
-        levels: [],
+        level: ipCookie('level') || 5,
+        levels: 6,
+        levelList: [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
         show: false,
-        level: 5,
         zoomValues: _zoomValues,
         zoom: ipCookie('zoom') || 100,
         goto: function () {
@@ -513,6 +545,12 @@ angular.module('leser').factory('ReaderControls', [
           }
         }
       };
+    // update cookie when quality level updates
+    $rootScope.$watch(function () {
+      return _controls.level;
+    }, function (newValue, oldValue) {
+      ipCookie('level', newValue, { expires: 365 });
+    });
     // update cookie when zoom updates
     $rootScope.$watch(function () {
       return _controls.zoom;
@@ -528,6 +566,19 @@ angular.module('leser').factory('ReaderControls', [
         for (var i = 1; i <= pages; i++) {
           _controls.pageList.push(i);
         }
+      }
+    });
+    // update levelList when levels updates
+    $rootScope.$watch(function () {
+      return _controls.levels;
+    }, function (levels, oldValue) {
+      if (levels !== oldValue) {
+        _controls.levelList = [];
+        for (var i = 0; i < levels; i++) {
+          _controls.levelList.push(i);
+        }
+        if (levels - 1 < _controls.level)
+          _controls.level = levels - 1;
       }
     });
     // Public API
