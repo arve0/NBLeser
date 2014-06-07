@@ -10,10 +10,16 @@ angular.module('leser').controller('LeserController',
         $scope.controls = ReaderControls;
         $scope.controls.show = true;
 
+        $scope.scrollTop = 0; // initial position
+        $document.on('scroll', function(){
+            $scope.scrollTop = window.pageYOffset;
+            $scope.$digest();
+        });
+        $document.on('touchstart', function(){
+            $scope.scrollTop = window.pageYOffset;
+            $scope.$digest();
+        });
 
-        $scope.show = function(windowPosition, elementPosition){
-            return Math.abs(windowPosition - elementPosition) < 5000;
-        };
 
         var bookPromise = Tilemap.getPages(urn);
         bookPromise.then(function(pages){

@@ -8,6 +8,8 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
         _zoomValues.push({value: i, text: i + '%'});
     }
 
+    var _windowHeight = $window.innerHeight;
+
     var _controls = {
         currentPage: 1,
         pages: 1,
@@ -30,6 +32,15 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope) {
             else {
                 $location.hash(id);
                 $anchorScroll();
+            }
+        },
+        showPage: function(windowPageYOffset, elementTopOffset, elementBottomOffset){
+            if (Math.abs(windowPageYOffset - elementTopOffset) > 5000) return false; // short curcuit
+            else {
+                return Math.abs(windowPageYOffset - elementTopOffset) < _windowHeight    || // top in view
+                       Math.abs(windowPageYOffset - elementBottomOffset) < _windowHeight || // bottom in view
+                       ( (elementTopOffset - windowPageYOffset) < 0 &&                      // special case, top over view
+                         (windowPageYOffset + _windowHeight - elementBottomOffset) < 0 );   // AND bottom under view
             }
         },
     };
