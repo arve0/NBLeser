@@ -75,10 +75,9 @@
   text-decoration: underline;
 }
 .ui-reset {
+  margin-left: -30px;
   position: relative;
-  top: 3px;
-  left: -30px;
-  margin-right: -30px;
+  top: 4px;
   font-family: 'Glyphicons Halflings';
   font-style: normal;
   font-weight: 400;
