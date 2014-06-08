@@ -1,8 +1,12 @@
 {
   "name": "nbleser",
   "description": "Et alternativ til nasjonalbibliotekets egen leser.",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "author": "Arve Seljebu",
+  "repository" : {
+      "type" : "git",
+      "url" : "https://github.com/arve0/NBLeser.git"
+  },
   "engines": {
     "node": "0.10.x",
     "npm": "1.4.x"
