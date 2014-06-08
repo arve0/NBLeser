@@ -22,14 +22,18 @@
 .flex(@values) {
     -webkit-box-flex: @values;
     -moz-box-flex:  @values;
-    -webkit-flex:  @values;
     -ms-box-flex: @values;
+    box-flex: @values;
+    -webkit-flex:  @values;
     -ms-flex:  @values;
     flex:  @values;
 }
-.flex-direction(@value) {
-    -webkit-flex-direction:@value;
-    flex-direction:@value;
+.flex-direction-column {
+    -webkit-box-orient:vertical;
+    -moz-box-orient:vertical;
+    -ms-box-orient:vertical;
+    -webkit-flex-direction:column;
+    flex-direction:column;
 }
 .github-fork-ribbon {
     background-color: #f80;
@@ -59,8 +63,7 @@
     margin:30px auto;
     .top {
         .flexbox();
-        .flex-direction(column);
-        -webkit-box-orient:vertical;
+        .flex-direction-column;
         .alert {
             margin:20px 0 0 0;
         }
@@ -167,8 +170,7 @@ a.ui-reset:hover {
     margin:0 auto;
     .page {
         .flexbox();
-        .flex-direction(column);
-        -webkit-box-orient:vertical;
+        .flex-direction-column;
         width:100%;
         height:100%; // scale to parent (parent is set with page-height directive)
 
@@ -177,11 +179,16 @@ a.ui-reset:hover {
             .flex(1);
             width:100%;
 
-            img {
-                width:100%;
-                height:auto;
-                display:block;
+            .image {
+                .flexbox();
+                .flex(1);
+                img {
+                    width:100%;
+                    height:auto;
+                    display:block;
+                }
             }
+
         }
     }
 }

@@ -3,7 +3,9 @@
         <div ng-repeat="page in pages" id="p{{$index + 1}}" page-height zoom="controls.zoom" class="loading">
             <div class="page" ng-if="controls.showPage(scrollTop, page.offsetTop, page.offsetBottom)">
                 <div ng-repeat="row in page.currentLevel.images" class="tile-row" scale-row>
-                    <img ng-repeat="image in row" ng-src="{{image}}" scale-image />
+                    <div ng-repeat="image in row" class="image" scale-image>
+                        <img ng-src="{{image}}" />
+                    </div>
                 </div>
             </div><!--show-page-->
         </div><!--repeat-page-->

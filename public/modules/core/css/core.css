@@ -1,4 +1,11 @@
 /* Mixins */
+.flex-direction-column {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
 .github-fork-ribbon {
   background-color: #f80;
 }
@@ -32,9 +39,11 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
   -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-box-orient: vertical;
 }
 .home .top .alert {
   margin: 20px 0 0 0;
@@ -145,9 +154,11 @@ a.ui-reset:hover {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
   -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-box-orient: vertical;
   width: 100%;
   height: 100%;
 }
@@ -159,13 +170,28 @@ a.ui-reset:hover {
   display: flex;
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
-  -webkit-flex: 1;
   -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
   width: 100%;
 }
-.book .page .tile-row img {
+.book .page .tile-row .image {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+.book .page .tile-row .image img {
   width: 100%;
   height: auto;
   display: block;
@@ -197,8 +223,9 @@ a.ui-reset:hover {
 .search-list .details {
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
-  -webkit-flex: 1;
   -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
@@ -214,8 +241,9 @@ a.ui-reset:hover {
 .search-list .image {
   -webkit-box-flex: 0.15;
   -moz-box-flex: 0.15;
-  -webkit-flex: 0.15;
   -ms-box-flex: 0.15;
+  box-flex: 0.15;
+  -webkit-flex: 0.15;
   -ms-flex: 0.15;
   flex: 0.15;
   margin-right: 10px;

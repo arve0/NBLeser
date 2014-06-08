@@ -11,11 +11,11 @@ return {
             element.css('-webkit-box-flex', scale);
             element.css('-moz-box-flex', scale);
             element.css('-ms-box-flex', scale);
+            element.css('box-flex', scale);
             element.css('-webkit-flex', scale);
             element.css('-ms-flex', scale);
             element.css('flex', scale);
         }
-        else element.css('-webkit-flex', 1);
     }
 };
 });
