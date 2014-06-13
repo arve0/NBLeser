@@ -269,9 +269,10 @@ angular.module('leser').controller('LeserController', [
     $rootScope.error = '';
     // reset error messages
     var urn = $stateParams.urn;
-    var searchPromise = Search.get('urn:' + urn);
+    // set title
+    var searchPromise = Search.get('urn:"' + urn + '"');
     searchPromise.then(function (data) {
-      $window.document.title = data.entry[0].title;
+      $window.document.title = data.entry[0].title.$t;
     });
     $scope.controls = ReaderControls;
     $scope.controls.show = true;
