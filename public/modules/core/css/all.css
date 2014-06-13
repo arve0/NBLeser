@@ -1,12 +1,4 @@
 /* Mixins */
-.flex-direction-column {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
 .github-fork-ribbon {
   background-color: #f80;
 }
@@ -121,24 +113,8 @@ a.ui-reset:hover {
 }
 
 /* Mixins */
-.flex-direction-column {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
 
 /* Mixins */
-.flex-direction-column {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
 .book {
   margin: 0 auto;
 }
@@ -220,14 +196,6 @@ a.ui-reset:hover {
 }
 
 /* Mixins */
-.flex-direction-column {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-}
 .search {
   width: 90%;
   margin: 30px auto;
