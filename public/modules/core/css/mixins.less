@@ -1,0 +1,38 @@
+/* Mixins */
+
+.flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.flexbox-center() {
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+.flex(@values) {
+    -webkit-box-flex: @values;
+    -moz-box-flex:  @values;
+    -ms-box-flex: @values;
+    box-flex: @values;
+    -webkit-flex:  @values;
+    -ms-flex:  @values;
+    flex:  @values;
+}
+.flex-direction-column {
+    -webkit-box-orient:vertical;
+    -moz-box-orient:vertical;
+    -ms-box-orient:vertical;
+    -webkit-flex-direction:column;
+    -ms-flex-direction:column;
+    flex-direction:column;
+}

@@ -1,52 +1,10 @@
-/* Mixins */
+@import "mixins.less";
 
-.flexbox() {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-}
-.flexbox-center() {
-    -webkit-box-pack: center;
-    -moz-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -moz-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
-}
-.flex(@values) {
-    -webkit-box-flex: @values;
-    -moz-box-flex:  @values;
-    -ms-box-flex: @values;
-    box-flex: @values;
-    -webkit-flex:  @values;
-    -ms-flex:  @values;
-    flex:  @values;
-}
-.flex-direction-column {
-    -webkit-box-orient:vertical;
-    -moz-box-orient:vertical;
-    -ms-box-orient:vertical;
-    -webkit-flex-direction:column;
-    -ms-flex-direction:column;
-    flex-direction:column;
-}
 .github-fork-ribbon {
     background-color: #f80;
 }
 .modal-content .alert {
     margin-bottom:0;
-}
-.loading {
-    background-image:url(/modules/core/img/loaders/loader.gif);
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-size: 10%;
 }
 .history {
     color:#c0c0c0;
@@ -122,29 +80,6 @@ a.ui-reset:hover {
 	display: none !important;
 }
 
-.zoom-controls {
-    float:right;
-    padding-top:4px;
-
-    > div {
-        float:left;
-        padding:0 10px;
-    }
-
-    p {
-        color:#ffffff;
-        margin:0;
-        float:left;
-        clear:none;
-        padding-top:8px;
-        padding-right:4px;
-        font-size:18px;
-    }
-    select {
-        float:left;
-        width:auto;
-    }
-}
 .goto {
     float:right;
     padding-top:8px;
@@ -166,33 +101,6 @@ a.ui-reset:hover {
 .content {
     padding-top:50px;
 }
-.book {
-    margin:0 auto;
-    .page {
-        .flexbox();
-        .flex-direction-column;
-        width:100%;
-        height:100%; // scale to parent (parent is set with page-height directive)
-
-        .tile-row {
-            .flexbox();
-            .flex(1);
-            width:100%;
-
-            .image {
-                .flexbox();
-                .flex(1);
-                img {
-                    width:100%;
-                    height:auto;
-                    display:block;
-                }
-            }
-
-        }
-    }
-}
-
 
 .search-list {
     padding-left:0;
