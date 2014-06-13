@@ -1,11 +1,18 @@
 'use strict';
 
 angular.module('leser').controller('LeserController',
-        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout) {
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window) {
 
         $rootScope.error = ''; // reset error messages
         
         var urn = $stateParams.urn;
+
+        // set title
+        var searchPromise = Search.get('urn:"' + urn + '"');
+        searchPromise.then(function(data){
+            $window.document.title = data.entry[0].title.$t;
+        });
+
 
         $scope.controls = ReaderControls;
         $scope.controls.show = true;
@@ -30,8 +37,9 @@ angular.module('leser').controller('LeserController',
         });
 
 
-        var bookPromise = Tilemap.getPages(urn);
-        bookPromise.then(function(pages){
+        var tilemapPromise = Tilemap.getPages(urn);
+        tilemapPromise.then(function(pages){
+            //console.log(pages);
             var i;
             $scope.pages = pages;
             $scope.controls.pages = pages.length;

@@ -119,64 +119,6 @@ a.ui-reset:hover {
 .content {
   padding-top: 50px;
 }
-.search-list {
-  padding-left: 0;
-}
-.search-list li.book-entry {
-  list-style: none;
-  padding: 10px;
-  margin: 5px;
-  border: solid 1px;
-  border-radius: 3px;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  align-items: center;
-}
-.search-list strong {
-  padding-left: 4px;
-}
-.search-list a {
-  text-decoration: none;
-  color: #333;
-  cursor: pointer;
-}
-.search-list .details {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
-.search-list .details ul {
-  padding-left: 0;
-}
-.search-list .details li {
-  list-style: none;
-}
-.search-list .details .panel-group {
-  margin-bottom: 0;
-}
-.search-list .image {
-  -webkit-box-flex: 0.15;
-  -moz-box-flex: 0.15;
-  -ms-box-flex: 0.15;
-  box-flex: 0.15;
-  -webkit-flex: 0.15;
-  -ms-flex: 0.15;
-  flex: 0.15;
-  margin-right: 10px;
-  width: 50px;
-}
-.search-list .image img {
-  width: 63px;
-  height: 80px;
-  border-radius: 3px;
-}
 
 /* Mixins */
 .flex-direction-column {
@@ -275,4 +217,68 @@ a.ui-reset:hover {
 .zoom-controls select {
   float: left;
   width: auto;
+}
+
+/* Mixins */
+.flex-direction-column {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.search {
+  width: 90%;
+  margin: 30px auto;
+}
+.search-list {
+  padding-left: 0;
+}
+.search-list li.book-entry {
+  list-style: none;
+  padding: 10px;
+  margin: 5px;
+  border: solid 1px;
+  border-radius: 3px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.search-list strong {
+  padding-left: 4px;
+}
+.search-list a {
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+.search-list .details {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+.search-list .details ul {
+  padding-left: 0;
+}
+.search-list .details li {
+  list-style: none;
+}
+.search-list .details .panel-group {
+  margin-bottom: 0;
+}
+.search-list .image {
+  margin-right: 10px;
+}
+.search-list .image img {
+  width: 56px;
+  height: 80px;
+  border-radius: 3px;
 }

@@ -1,11 +1,9 @@
-<div class="modal-header">
-    <h3 class="modal-title">Søkeresultat</h3>
-</div>
-<div class="modal-body">
+<section data-ng-controller="SearchController" class="search">
+    <h4>Søkeresultat for <small>{{query}}</small></h3>
     <ul ng-repeat="result in searchResults" class="search-list">
         <li ng-repeat="book in result.entry" class="book-entry">
             <div class="image">
-                <a ng-click="read(book['nb:urn'].$t,'true')" title="Les boken">
+                <a ng-click="read(book['nb:urn'].$t)" title="Les boken">
                     <img ng-src="{{book.cover}}" />
                 </a>
             </div>
@@ -14,22 +12,19 @@
                     <accordion-group is-open="status.open">
                         <accordion-heading>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                        <a ng-click="read(book['nb:urn'].$t,'true')" title="Les boken">
-                            {{book.title.$t}}
-                        </a>
+                            <a ng-click="read(book['nb:urn'].$t)" title="Les boken">
+                                {{book.title.$t}}
+                            </a>
                         </accordion-heading>
                         <ul>
                             <li><strong>År:</strong> {{book['nb:year'].$t}}</li>
                             <li ng-if="book['nb:isbn'].$t"><strong>ISBN:</strong> {{book['nb:isbn'].$t}}</li>
                             <li><strong>Forfatter(e):</strong> {{book['nb:namecreators'].$t}}</li>
-                            <li ng-if="book['nb:subjecttopic'].$t"><strong>Stikkord:</strong> {{book['nb:subjecttopic'].$t}}</li>
                             <li><strong>URN:</strong> {{book['nb:urn'].$t}}</li>
+                            <li ng-if="book['nb:subjecttopic'].$t"><strong>Stikkord:</strong> {{book['nb:subjecttopic'].$t}}</li>
                     </accordion-group>
                 </accordion>
             </div>
         </li>
     </ul>
-</div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="closeModal()">Lukk</button>
-</div>
+</section>

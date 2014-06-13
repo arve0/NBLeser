@@ -14,5 +14,3 @@ Søkeliste
 
 Infoknapp i leser
 - Med samme info som i søket
-
-Et treff -> les bok

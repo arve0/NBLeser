@@ -48,6 +48,8 @@ angular.element(document).ready(function () {
 ApplicationConfiguration.registerModule('core');'use strict';
 // Use applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('leser');'use strict';
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('search');'use strict';
 // Setting up route
 angular.module('core').config([
   '$stateProvider',
@@ -97,30 +99,37 @@ angular.module('core').controller('HomeController', [
   'Search',
   '$modal',
   'ReaderControls',
-  function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls) {
+  '$window',
+  function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls, $window) {
     // variables
     var modalInstance;
     ReaderControls.show = false;
     // hide controls in home view
-    $scope.read = function (urn, close) {
-      $location.url('/leser/' + urn);
-      if (close) {
-        modalInstance.close();
-      }
-    };
+    // sett tittel
+    $window.document.title = 'NBLeser - les over 170-tusen gratis eb\xf8ker fra Nasjonalbiblioteket';
     // check country
-    $http.get('/geoip').success(function (geoip) {
-      if (geoip.error) {
-        console.log(geoip.error);
-      }
-      if (geoip.country !== 'NO') {
-        modalInstance = $modal.open({
-          templateUrl: '/modules/core/views/norwegian-modal.client.view.html',
-          scope: $scope
-        });
-      }
-    });
-    $scope.readFirst = function (query) {
+    if (!$rootScope.geoChecked) {
+      $http.get('/geoip').success(function (geoip) {
+        if (geoip.error) {
+          console.log(geoip.error);
+        }
+        if (geoip.country !== 'NO') {
+          modalInstance = $modal.open({
+            templateUrl: '/modules/core/views/norwegian-modal.client.view.html',
+            scope: $scope
+          });
+        }
+        $rootScope.geoChecked = true;
+      });
+    }
+    $scope.closeModal = function () {
+      modalInstance.close();
+    };
+    // button actions
+    $scope.search = function (query) {
+      $location.url('/search/' + query);
+    };
+    $scope.readFirstHit = function (query) {
       $scope.error = false;
       var searchPromise = Search.get(query);
       searchPromise.then(function (data) {
@@ -130,24 +139,8 @@ angular.module('core').controller('HomeController', [
         $scope.error = err;
       });
     };
-    $scope.search = function (query) {
-      $scope.error = false;
-      $scope.searchResults = [];
-      var searchPromise = Search.get(query);
-      searchPromise.then(function (data) {
-        $scope.searchResults.push(data);
-        //console.log(data);
-        modalInstance = $modal.open({
-          size: 'lg',
-          templateUrl: '/modules/core/views/search-modal.client.view.html',
-          scope: $scope
-        });
-      }, function (error) {
-        $scope.error = error;
-      });
-    };
-    $scope.closeModal = function () {
-      modalInstance.close();
+    $scope.read = function (urn) {
+      $location.url('/leser/' + urn);
     };
   }
 ]);'use strict';
@@ -250,105 +243,12 @@ angular.module('core').service('Menus', function () {
   //Adding the topbar menu
   this.addMenu('topbar');
 });'use strict';
-angular.module('core').factory('Search', [
-  '$http',
-  '$q',
-  '$sce',
-  function ($http, $q, $sce) {
-    var currentData;
-    var deferred;
-    function refine(data) {
-      var urlTemplate = 'http://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=2400&resY=3000&tileWidth=1024&tileHeight=102&urn=';
-      if (Array.isArray(data.entry) !== true) {
-        data.entry = [data.entry];
-      }
-      for (var i = 0; i < data.entry.length; i++) {
-        var entry = data.entry[i];
-        if (typeof entry['nb:urn'] === 'undefined' || typeof entry['nb:digital'] === 'undefined' || entry['nb:digital'].$t === 'false') {
-          var removed = data.entry.splice(i, 1);
-          console.log('error with data, removing ', removed);
-          break;
-        }
-        var urn = entry['nb:urn'].$t;
-        entry.cover = urlTemplate + urn + '_C1';
-        if (urn.search('; ') !== -1) {
-          // found several urns - fix
-          var splitted = urn.split('; ');
-          entry['nb:urn'].$t = splitted[splitted.length - 1];
-        }
-      }
-      return data;
-    }
-    function get(q, index, limit) {
-      currentData = [];
-      // reset upon new search
-      deferred = $q.defer();
-      // advanced search
-      q = q.replace(/(forfatter|f)[:=]/i, 'namecreators:');
-      q = q.replace(/(år|å)[:=]/i, 'year:');
-      q = q.replace(/(isbn|i)[:=]/i, 'isbn:');
-      q = q.replace(/(beskrivelse|b)[:=]/i, 'description:');
-      // free text search
-      var ftRegex = /(fritekst|ft)[:=](ja|j)/i;
-      if (q.search(ftRegex) !== -1) {
-        q = q.replace(ftRegex, '');
-        q += '&ft=1';
-      }
-      // t: after ft:
-      q = q.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
-      // remove malformed search
-      q = q.replace(/[:=&/]$/i, '');
-      // append parameters
-      index = index || 1;
-      limit = limit || 50;
-      q += '&index=' + index;
-      q += '&items=' + limit;
-      $http.get('/search?q=' + q).success(function (data) {
-        /* object format:
-            ns2:itemsPerPage
-            ns2:startIndex
-            ns2:totalResults
-            link[].href - urls: [0] this, [1] next, [2] spec
-            entry[] - hits
-                .link[] - [0] book info, [2] urn url, [3] image structure
-                .nb:date.$t
-                .nb:isbn.$t
-                .nb:languages.$t - format "mul; eng; nob"
-                .nb:mainentry.$t  - author
-                .nb:namecreator.$t - author
-                .nb:namecreators.$t - authors
-                .nb:subjecttopic.$t - topic
-                .nb:urn.$t
-                .nb:year.$t
-                .summary.$t - format [redaktører/editors: Nevanka Dobljekar, ...;
-                                         tekst/text: Arve Hovig, ...;
-                                         oversettelse/translation: Marith Hope, ...;
-                                         fotografi/photography: Halvard Haugerud] Parallell norsk og engelsk tekst Utstillingskatalog
-                .title.$t
-            nb:snippet.$t extract of free text search
-            */
-        data = data.feed;
-        if (data.entry) {
-          data = refine(data);
-          currentData = data;
-          deferred.resolve(data);
-        } else {
-          deferred.reject('Ingen treff.');
-        }
-      }).error(function (err, stat) {
-        deferred.reject('En feil oppstod. Har du avsluttet alle anf\xf8rselstegn?');
-      });
-      return deferred.promise;
-    }
-    return { get: get };
-  }
-]);'use strict';
 //Setting up route
 angular.module('leser').config([
   '$stateProvider',
   function ($stateProvider) {
     // Leser state routing
-    $stateProvider.state('/leser', {
+    $stateProvider.state('leser', {
       url: '/leser/:urn',
       templateUrl: 'modules/leser/views/leser.client.view.html'
     });
@@ -363,10 +263,16 @@ angular.module('leser').controller('LeserController', [
   '$location',
   'ReaderControls',
   '$timeout',
-  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout) {
+  'Search',
+  '$window',
+  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window) {
     $rootScope.error = '';
     // reset error messages
     var urn = $stateParams.urn;
+    var searchPromise = Search.get('urn:' + urn);
+    searchPromise.then(function (data) {
+      $window.document.title = data.entry[0].title;
+    });
     $scope.controls = ReaderControls;
     $scope.controls.show = true;
     $scope.scrollTop = 0;
@@ -389,8 +295,9 @@ angular.module('leser').controller('LeserController', [
       $scope.scrollTop = window.pageYOffset;
       $scope.$digest();
     });
-    var bookPromise = Tilemap.getPages(urn);
-    bookPromise.then(function (pages) {
+    var tilemapPromise = Tilemap.getPages(urn);
+    tilemapPromise.then(function (pages) {
+      //console.log(pages);
       var i;
       $scope.pages = pages;
       $scope.controls.pages = pages.length;
@@ -683,5 +590,140 @@ angular.module('leser').factory('Tilemap', [
     };
     // Public API
     return { getPages: getPages };
+  }
+]);'use strict';
+//Setting up route
+angular.module('search').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    // Search state routing
+    $stateProvider.state('search', {
+      url: '/search/:query',
+      templateUrl: 'modules/search/views/search.client.view.html'
+    });
+  }
+]);'use strict';
+angular.module('search').controller('SearchController', [
+  '$rootScope',
+  '$scope',
+  '$stateParams',
+  '$location',
+  'Search',
+  'ReaderControls',
+  '$window',
+  function ($rootScope, $scope, $stateParams, $location, Search, ReaderControls, $window) {
+    var query = $stateParams.query;
+    $window.document.title = 'S\xf8keresultat for ' + query;
+    ReaderControls.show = false;
+    $scope.query = query;
+    $scope.read = function (urn) {
+      $location.url('/leser/' + urn);
+    };
+    $scope.error = false;
+    $scope.searchResults = [];
+    var searchPromise = Search.get(query);
+    searchPromise.then(function (data) {
+      $scope.searchResults.push(data);
+      if (data.entry.length === 1) {
+        var urn = data.entry[0]['nb:urn'].$t;
+        $location.url('/leser/' + urn);
+      }  //console.log(data);
+         //console.log(data.entry[0]['nb:sesamid']);
+    }, function (error) {
+      $rootScope.error = error;
+      $location.url('/');
+    });
+  }
+]);'use strict';
+angular.module('core').factory('Search', [
+  '$http',
+  '$q',
+  function ($http, $q) {
+    var currentData;
+    var deferred;
+    function refine(data) {
+      var coverUrlTemplate = 'http://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn=';
+      if (Array.isArray(data.entry) !== true) {
+        data.entry = [data.entry];
+      }
+      for (var i = 0; i < data.entry.length; i++) {
+        var entry = data.entry[i];
+        if (typeof entry['nb:urn'] === 'undefined' || typeof entry['nb:digital'] === 'undefined' || entry['nb:digital'].$t === 'false') {
+          var removed = data.entry.splice(i, 1);
+          console.log('error with data, removing ', removed);
+          break;
+        }
+        var urn = entry['nb:urn'].$t;
+        entry.cover = coverUrlTemplate + urn + '_C1';
+        if (urn.search('; ') !== -1) {
+          // found several urns - fix
+          var splitted = urn.split('; ');
+          entry['nb:urn'].$t = splitted[splitted.length - 1];
+        }
+      }
+      return data;
+    }
+    function get(q, index, limit) {
+      currentData = [];
+      // reset upon new search
+      deferred = $q.defer();
+      // advanced search
+      q = q.replace(/(forfatter|f)[:=]/i, 'namecreators:');
+      q = q.replace(/(år|å)[:=]/i, 'year:');
+      q = q.replace(/(isbn|i)[:=]/i, 'isbn:');
+      q = q.replace(/(beskrivelse|b)[:=]/i, 'description:');
+      // free text search
+      var ftRegex = /(fritekst|ft)[:=](ja|j)/i;
+      if (q.search(ftRegex) !== -1) {
+        q = q.replace(ftRegex, '');
+        q += '&ft=1';
+      }
+      // t: after ft:
+      q = q.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
+      // remove malformed search
+      q = q.replace(/[:=&/]$/i, '');
+      // append parameters
+      index = index || 1;
+      limit = limit || 50;
+      q += '&index=' + index;
+      q += '&items=' + limit;
+      $http.get('/search?q=' + q).success(function (data) {
+        /* object format:
+            ns2:itemsPerPage
+            ns2:startIndex
+            ns2:totalResults
+            link[].href - urls: [0] this, [1] next, [2] spec
+            entry[] - hits
+                .link[] - [0] book info, [2] urn url, [3] image structure
+                .nb:date.$t
+                .nb:isbn.$t
+                .nb:languages.$t - format "mul; eng; nob"
+                .nb:mainentry.$t  - author
+                .nb:namecreator.$t - author
+                .nb:namecreators.$t - authors
+                .nb:subjecttopic.$t - topic
+                .nb:urn.$t
+                .nb:year.$t
+                .summary.$t - format [redaktører/editors: Nevanka Dobljekar, ...;
+                                         tekst/text: Arve Hovig, ...;
+                                         oversettelse/translation: Marith Hope, ...;
+                                         fotografi/photography: Halvard Haugerud] Parallell norsk og engelsk tekst Utstillingskatalog
+                .title.$t
+            nb:snippet.$t extract of free text search
+            */
+        data = data.feed;
+        if (data.entry) {
+          data = refine(data);
+          currentData = data;
+          deferred.resolve(data);
+        } else {
+          deferred.reject('Ingen treff.');
+        }
+      }).error(function (err, stat) {
+        deferred.reject('En feil oppstod. Har du avsluttet alle anf\xf8rselstegn?');
+      });
+      return deferred.promise;
+    }
+    return { get: get };
   }
 ]);

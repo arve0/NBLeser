@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('core').factory('Search',
-function($http, $q, $sce) {
+function($http, $q) {
     var currentData;
     var deferred;
 
     function refine(data) {
-        var urlTemplate = 'http://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=2400&resY=3000&tileWidth=1024&tileHeight=102&urn=';
+        var coverUrlTemplate = 'http://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn='; 
         if (Array.isArray(data.entry) !== true){
             data.entry = [data.entry];
         }
@@ -19,7 +19,7 @@ function($http, $q, $sce) {
                 break;
             }
             var urn = entry['nb:urn'].$t;
-            entry.cover = urlTemplate + urn + '_C1';
+            entry.cover = coverUrlTemplate + urn + '_C1';
             if (urn.search('; ') !== -1){
                 // found several urns - fix
                 var splitted = urn.split('; ');

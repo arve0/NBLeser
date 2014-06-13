@@ -3,8 +3,8 @@
 module.exports = {
 	app: {
 		title: 'NBLeser',
-		description: 'Stream over 170 tusen norske ebøker gratis! Et alternativ til nasjonalbibliotekets egen leser.',
-		keywords: 'gratis, ebok, ebøker, norske ebøker, norsk ebok, stream, nasjonalbiblioteket, bokhylla.no, html5 leser'
+		description: 'Stream over 170-tusen norske ebøker fra Nasjonalbiblioteket gratis! Fungerer bra på iPad og Android nettbrett.',
+		keywords: 'gratis, ebok, ebøker, norske ebøker, norsk ebok, stream, nasjonalbiblioteket, ipad, android, nettbrett, app, webapp, bokhylla.no, html5 leser'
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
