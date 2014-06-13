@@ -7,7 +7,7 @@ function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls, 
     ReaderControls.show = false; // hide controls in home view
 
     // sett tittel
-    $window.document.title = 'NBLeser - les over 170-tusen gratis ebøker fra Nasjonalbiblioteket';
+    $window.document.title = 'NBLeser - Les over 170-tusen gratis ebøker fra Nasjonalbiblioteket';
 
     // check country
     if (! $rootScope.geoChecked) {
