@@ -15,8 +15,8 @@ function($http, $q) {
             if (typeof entry['nb:urn'] === 'undefined' || typeof entry['nb:digital'] === 'undefined' ||
                     entry['nb:digital'].$t === 'false') {
                 var removed = data.entry.splice(i,1);
-                console.log('error with data, removing ', removed);
-                break;
+                console.log('error with data, removing i:', i, removed);
+                continue;
             }
             var urn = entry['nb:urn'].$t;
             entry.cover = coverUrlTemplate + urn + '_C1';
