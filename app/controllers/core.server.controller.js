@@ -88,3 +88,21 @@ exports.geoip = function(req, res) {
         res.send(geo);
     }
 };
+
+/* metadata for books */
+exports.metadata = function(req, res) {
+    var query = 'http://xisbn.worldcat.org/webservices/xid/isbn/';
+    query += req.params.isbn;
+    query += '?method=getMetadata&format=json&fl=*';
+
+    http.get(query, function(response){
+        var json = '';
+        response.on('data', function(chunk){
+            json += chunk;
+        });
+        response.on('end', function(){
+            res.send(json);
+        });
+    });
+    
+};

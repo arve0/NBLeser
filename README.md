@@ -36,6 +36,9 @@ http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=
 Henter bilder(url fra tilemap):
 http://www.nb.no/services/image/
 
+Metadata til bøker:
+http://xisbn.worldcat.org/webservices/xid/isbn/8200427005?method=getMetadata&format=json&fl=*
+
 ## Ressurser som ikke er tatt i bruk
 Søkeforslag - http://www.nb.no/nbsok/suggestion/search?searchString=jo&maxResults=5&mediaType=&highlight=true
 
