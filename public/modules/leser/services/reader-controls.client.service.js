@@ -10,13 +10,17 @@ function($location, $anchorScroll, $modal, ipCookie, $window, $rootScope, $timeo
 
     var _windowHeight = $window.innerHeight;
     var _pageList = [1];
+    var _level = ipCookie('level');
+    if (_level === undefined) {
+        _level = 5;
+    }
 
     var _controls = {
         pages: 1,
         pageList: _pageList,
         currentPage: _pageList[0],
         firstRun: true,
-        level: ipCookie('level') || 5,
+        level: _level,
         levels: 6,
         levelList: [0,1,2,3,4,5],
         show: false,
