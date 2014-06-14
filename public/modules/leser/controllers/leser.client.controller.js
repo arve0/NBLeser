@@ -4,6 +4,7 @@ angular.module('leser').controller('LeserController',
         function($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window) {
 
         $rootScope.error = ''; // reset error messages
+        $scope.showSettings = false;
         
         var urn = $stateParams.urn;
 

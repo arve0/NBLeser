@@ -181,8 +181,14 @@ a.ui-reset:hover {
   float: left;
   padding: 0 10px;
 }
+.zoom-controls .glyphicon {
+  color: #fff;
+  float: left;
+  font-size: 22px;
+  padding-top: 8px;
+}
 .zoom-controls p {
-  color: #ffffff;
+  color: #fff;
   margin: 0;
   float: left;
   clear: none;
@@ -214,7 +220,6 @@ a.ui-reset:hover {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  align-items: center;
 }
 .search-list strong {
   padding-left: 4px;
@@ -241,6 +246,9 @@ a.ui-reset:hover {
 }
 .search-list .details .panel-group {
   margin-bottom: 0;
+}
+.search-list .details .les {
+  margin-top: 6px;
 }
 .search-list .image {
   margin-right: 10px;
