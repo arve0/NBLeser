@@ -3,7 +3,7 @@
     <ul ng-repeat="result in searchResults" class="search-list">
         <li ng-repeat="book in result.entry" class="book-entry">
             <div class="image">
-                <a ng-click="read(book['nb:urn'].$t)" title="Les boken">
+                <a ng-href="/#!/leser/{{book['nb:urn'].$t}}" title="Les boken">
                     <img ng-src="{{book.cover}}" />
                 </a>
             </div>
@@ -12,7 +12,7 @@
                     <accordion-group is-open="status.open">
                         <accordion-heading>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                            <a ng-click="read(book['nb:urn'].$t)" title="Les boken">
+                            <a ng-href="/#!/leser/{{book['nb:urn'].$t}}" title="Les boken">
                                 {{book.title.$t}}
                             </a>
                         </accordion-heading>
@@ -21,7 +21,7 @@
                             <li ng-if="book['nb:isbn'].$t"><strong>ISBN:</strong> {{book['nb:isbn'].$t}}</li>
                             <li><strong>Forfatter(e):</strong> {{book['nb:namecreators'].$t}}</li>
                             <li><strong>URN:</strong> {{book['nb:urn'].$t}}</li>
-                            <li ng-if="book['nb:subjecttopic'].$t"><strong>Stikkord:</strong> {{book['nb:subjecttopic'].$t}}</li>
+                            <li ng-if="book['nb:subjecttopic'].$t" ng-bind-html=" book['nb:subjecttopic'].$t | semicolonList "></li>
                     </accordion-group>
                 </accordion>
             </div>
