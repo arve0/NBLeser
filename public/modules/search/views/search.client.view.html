@@ -12,18 +12,18 @@
                     <accordion-group is-open="status.open">
                         <accordion-heading>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                            <a ng-href="/#!/leser/{{book['nb:urn'].$t}}" title="Les boken">
-                                {{book.title.$t}}
-                            </a>
+                            <a title="Vis detaljer">{{book.title.$t}}</a>
                         </accordion-heading>
                         <ul>
                             <li><strong>År:</strong> {{book['nb:year'].$t}}</li>
-                            <li ng-if="book['nb:isbn'].$t"><strong>ISBN:</strong> {{book['nb:isbn'].$t}}</li>
                             <li><strong>Forfatter(e):</strong> {{book['nb:namecreators'].$t}}</li>
+                            <li ng-if="book['nb:isbn'].$t"><strong>ISBN:</strong> {{book['nb:isbn'].$t}}</li>
                             <li><strong>URN:</strong> {{book['nb:urn'].$t}}</li>
-                            <li ng-if="book['nb:subjecttopic'].$t" ng-bind-html=" book['nb:subjecttopic'].$t | semicolonList "></li>
+                            <li ng-if="book['nb:subjecttopic'].$t"><strong>Stikkord: </strong>{{ book['nb:subjecttopic'].$t | semicolonList }}</li>
+                        </ul>
                     </accordion-group>
                 </accordion>
+                <a class="btn btn-default les" ng-href="/#!/leser/{{book['nb:urn'].$t}}">Les</a>
             </div>
         </li>
     </ul>

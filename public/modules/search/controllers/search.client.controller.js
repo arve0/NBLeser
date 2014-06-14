@@ -10,10 +10,6 @@ function($rootScope, $scope, $stateParams, $location, Search, ReaderControls, $w
 
     $scope.query = query;
 
-    $scope.read = function(urn){
-        $location.url('/leser/' + urn);
-    };
-
     $scope.error = false;
     $scope.searchResults = [];
     var searchPromise = Search.get(query);
