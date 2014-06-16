@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('core').controller('HeaderController',
-    function($scope, Menus, $anchorScroll, $location, $modal, ReaderControls) {
+    function($scope, Menus, $anchorScroll, $location, $modal, ReaderControls, BookInfo) {
+        $scope.bookInfo = BookInfo;
+        $scope.showSettings = false;
         $scope.isCollapsed = false;
         $scope.menu = Menus.getMenu('topbar');
 

@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$close()" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Informasjon</h3>
+</div>
+<div class="modal-body">
+    <ul>
+        <li><strong>Tittel: </strong>{{bookInfo.title}}</li>
+        <li><strong>Forlag: </strong>{{bookInfo.publisher}}<span ng-if="bookInfo.city">, {{bookInfo.city}}</span></li>
+        <li ng-if="bookInfo.author"><strong>Forfatter: </strong>{{bookInfo.author}}</li>
+        <li ng-if="bookInfo.authors"><strong>Forfattere: </strong>{{bookInfo.authors}}</li>
+        <li ng-if="bookInfo.edition"><strong>Utgave: </strong>{{bookInfo.edition}}</li>
+        <li><strong>Utgitt: </strong>{{bookInfo.issued}}</li>
+        <li><strong>Omfang: </strong>{{bookInfo.extent | extent}}</li>
+        <li ng-if="bookInfo.isbn"><strong>ISBN: </strong>{{bookInfo.isbn}}</li>
+        <li><strong>URN: </strong>{{bookInfo.urn}}</li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="$close()">Lukk</button>
+</div>

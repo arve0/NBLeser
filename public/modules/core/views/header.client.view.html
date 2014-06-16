@@ -34,6 +34,7 @@
                 </select>
             </div>
             <span class="glyphicon glyphicon-cog" ng-click="showSettings = !showSettings" title="Vis/skjul innstillinger"></span>
+            <span class="glyphicon glyphicon-info-sign" ng-click="bookInfo.show = true" title="Vis informasjon om bok"></span>
             <div class="form-inline">
                 <p>Gå til side</p>
                 <select ng-model="controls.currentPage" ng-change="controls.goto()" ng-options="page for page in controls.pageList" class="form-control">

@@ -12,6 +12,8 @@ function($http, $q) {
         }
         for (var i=0; i < data.entry.length; i++){
             var entry = data.entry[i];
+            // get sesamid from link[0]
+            entry.sesamid = entry.link[0].href.replace(/^http:\/\/[a-z.]*(\/[a-z0-9]+){4}\//i, '');
             if (typeof entry['nb:urn'] === 'undefined' || typeof entry['nb:digital'] === 'undefined' ||
                     entry['nb:digital'].$t === 'false') {
                 var removed = data.entry.splice(i,1);
@@ -29,35 +31,36 @@ function($http, $q) {
         return data;
     }
 
-    function get(q, index, limit) {
+    function get(query, index, limit) {
         currentData = []; // reset upon new search
         deferred = $q.defer();
 
         // advanced search
-        q = q.replace(/(forfatter|f)[:=]/i, 'namecreators:');
-        q = q.replace(/(år|å)[:=]/i, 'year:');
-        q = q.replace(/(isbn|i)[:=]/i, 'isbn:');
-        q = q.replace(/(beskrivelse|b)[:=]/i, 'description:');
+        query = query.replace(/(forfatter|f)[:=]/i, 'namecreators:');
+        query = query.replace(/(år|å)[:=]/i, 'year:');
+        query = query.replace(/(isbn|i)[:=]/i, 'isbn:');
+        query = query.replace(/(beskrivelse|b)[:=]/i, 'description:');
 
         // free text search
         var ftRegex = /(fritekst|ft)[:=](ja|j)/i;
-        if (q.search(ftRegex) !== -1){
-            q = q.replace(ftRegex, '');
-            q += '&ft=1';
+        if (query.search(ftRegex) !== -1){
+            query = query.replace(ftRegex, '');
+            query += '&ft=1';
         }
         // t: after ft:
-        q = q.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
+        query = query.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
         
         // remove malformed search
-        q = q.replace(/[:=&/]$/i, '');
+        query = query.replace(/[:=&/]$/i, '');
 
         // append parameters
         index = (index || 1);
         limit = (limit || 50);
-        q += '&index=' + index;
-        q += '&items=' + limit;
+        query += '&index=' + index;
+        query += '&items=' + limit;
 
-        $http.get('/search?q=' + q).success(function(data){
+        $http.get('/search?q=' + query).success(function(data){
+            console.log(data);
             /* object format:
             ns2:itemsPerPage
             ns2:startIndex

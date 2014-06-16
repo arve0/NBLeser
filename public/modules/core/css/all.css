@@ -179,13 +179,14 @@ a.ui-reset:hover {
 }
 .zoom-controls > div {
   float: left;
-  padding: 0 10px;
+  padding: 0 5px;
 }
 .zoom-controls .glyphicon {
   color: #fff;
   float: left;
   font-size: 22px;
-  padding-top: 8px;
+  margin: 8px 5px;
+  cursor: pointer;
 }
 .zoom-controls p {
   color: #fff;

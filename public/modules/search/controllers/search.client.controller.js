@@ -20,7 +20,6 @@ function($rootScope, $scope, $stateParams, $location, Search, ReaderControls, $w
             $location.url('/leser/' + urn);
         }
         //console.log(data);
-        //console.log(data.entry[0]['nb:sesamid']);
     },function(error){
         $rootScope.error = error;
         $location.url('/');

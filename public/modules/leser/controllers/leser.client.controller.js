@@ -1,17 +1,21 @@
 'use strict';
 
 angular.module('leser').controller('LeserController',
-        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window) {
+        function($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window, BookInfo) {
 
         $rootScope.error = ''; // reset error messages
         $scope.showSettings = false;
-        
-        var urn = $stateParams.urn;
 
-        // set title
+        var urn = $stateParams.urn;
+        BookInfo.urn = urn;
+
+
+        // set title and get book information
         var searchPromise = Search.get('urn:"' + urn + '"');
         searchPromise.then(function(data){
             $window.document.title = data.entry[0].title.$t;
+            // book info service
+            BookInfo.get(data.entry[0].sesamid);
         });
 
 
