@@ -1,7 +1,7 @@
 {
   "name": "nbleser",
   "description": "Et alternativ til nasjonalbibliotekets egen leser.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Arve Seljebu",
   "repository" : {
       "type" : "git",

@@ -109,7 +109,7 @@ angular.module('core').controller('HomeController', [
     ReaderControls.show = false;
     // hide controls in home view
     // sett tittel
-    $window.document.title = 'NBLeser - Les over 170-tusen gratis eb\xf8ker fra Nasjonalbiblioteket';
+    $window.document.title = 'NBLeser - Les over 170-tusen eb\xf8ker gratis fra Nasjonalbiblioteket';
     // check country
     if (!$rootScope.geoChecked) {
       $http.get('/geoip').success(function (geoip) {
@@ -278,7 +278,7 @@ angular.module('leser').controller('LeserController', [
     // set title and get book information
     var searchPromise = Search.get('urn:"' + urn + '"');
     searchPromise.then(function (data) {
-      $window.document.title = data.entry[0].title.$t;
+      $window.document.title = data.entry[0].title.$t + ', av ' + data.entry[0]['nb:mainentry'].$t + ' - Les/stream gratis med NBLeser';
       // book info service
       BookInfo.get(data.entry[0].sesamid);
     });

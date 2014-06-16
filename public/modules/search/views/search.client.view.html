@@ -3,7 +3,7 @@
     <ul ng-repeat="result in searchResults" class="search-list">
         <li ng-repeat="book in result.entry" class="book-entry">
             <div class="image">
-                <a ng-href="/#!/leser/{{book['nb:urn'].$t}}" tooltip="Les boken">
+                <a ng-href="/#!/leser/{{book['nb:urn'].$t}}" tooltip="Trykk for å lese">
                     <img ng-src="{{book.cover}}" />
                 </a>
             </div>
@@ -12,7 +12,7 @@
                     <accordion-group is-open="status.open">
                         <accordion-heading>
                             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                            <a tooltip="Vis detaljer">{{book.title.$t}}</a>
+                            <a tooltip="Trykk for å vise detaljer">{{book.title.$t}}</a>
                         </accordion-heading>
                         <ul>
                             <li><strong>Forfatter(e):</strong> {{book['nb:namecreators'].$t}}</li>

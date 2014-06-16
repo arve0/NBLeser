@@ -13,7 +13,7 @@ angular.module('leser').controller('LeserController',
         // set title and get book information
         var searchPromise = Search.get('urn:"' + urn + '"');
         searchPromise.then(function(data){
-            $window.document.title = data.entry[0].title.$t;
+            $window.document.title = data.entry[0].title.$t + ', av ' + data.entry[0]['nb:mainentry'].$t + ' - Les/stream gratis med NBLeser';
             // book info service
             BookInfo.get(data.entry[0].sesamid);
         });
