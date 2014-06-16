@@ -1,6 +1,40 @@
 'use strict';
 
 var http = require('http');
+var parse = require('xml2json');
+
+/**
+ * Internal helper functions
+ */
+function _getXMLSendJSON(query, callback){
+    // gets xml and returns json to callback(json, err)
+    http.get(query, function(response){
+        var xml = '';
+        response.on('data', function(chunk){
+            xml += chunk;
+        });
+        response.on('end', function(){
+            if (xml === '') {
+                callback({}, { message: 'Mottok ingen data fra ' + query });
+                return;
+            }
+            var json, error;
+            try {
+                json = parse.toJson(xml, {coerce: false, sanitize: false});
+            }
+            catch (e) {
+                error = e;
+            }
+            finally {
+                if (error) callback({}, error);
+                else callback(json);
+            }
+        });
+    });
+}
+ 
+
+
 
 /**
  * Module dependencies.
@@ -21,8 +55,6 @@ exports.tilemap = function(req,res) {
         });
     });
 };
-
-var parse = require('xml2json');
 
 exports.search = function(req, res) {
     /* get xml from nasjonalbiblioteket and convert to json
@@ -54,24 +86,9 @@ exports.search = function(req, res) {
     query += (req.query.ft === '1' ? '&ft=true':'');
 
     //console.log('getting xml', query);
-    http.get(query, function(response){
-        var xml = '';
-        response.on('data', function(chunk){
-            xml += chunk;
-        });
-        response.on('end', function(){
-            var json, error;
-            try {
-                json = parse.toJson(xml, {coerce: false, sanitize: false});
-            }
-            catch (e) {
-                error = e;
-            }
-            finally {
-                if (error) res.send({}, 500);
-                else res.send(json);
-            }
-        });
+    _getXMLSendJSON(query, function(json, err){
+        if (err) res.send(err, 500);
+        else res.send(json);
     });
 };
 
@@ -93,7 +110,7 @@ exports.geoip = function(req, res) {
 exports.metadata = function(req, res) {
     var query = 'http://xisbn.worldcat.org/webservices/xid/isbn/';
     query += req.params.isbn;
-    query += '?method=getMetadata&format=json&fl=*';
+    query += '?method=getMetadata&format=json&fl=*&count=1';
 
     http.get(query, function(response){
         var json = '';
@@ -105,4 +122,16 @@ exports.metadata = function(req, res) {
         });
     });
     
+};
+
+/* book info */
+exports.bookinfo = function(req, res) {
+    var sesamid = req.params.id;
+    var query = 'http://www.nb.no/services/search/v2/mods/' + sesamid;
+
+    _getXMLSendJSON(query, function(json, err){
+        if (err) res.send(err, 500);
+        else if (json === {}) res.send({error: 'Ingen treff.'}, 404);
+        else res.send(json);
+    });
 };
