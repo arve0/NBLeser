@@ -5,11 +5,11 @@
 <div class="modal-body">
     <ul>
         <li><strong>Tittel: </strong>{{bookInfo.data.title}}</li>
-        <li><strong>Forlag: </strong>{{bookInfo.data.publisher}}<span ng-if="bookInfo.metadata.city">, {{bookInfo.metadata.city}}</span></li>
+        <li><strong>Forlag: </strong>{{bookInfo.data.publisher | publisher}}<span ng-if="bookInfo.metadata.city">, {{bookInfo.metadata.city}}</span></li>
         <li ng-if="bookInfo.data.author"><strong>Forfatter: </strong>{{bookInfo.data.author}}</li>
         <li ng-if="bookInfo.data.authors"><strong>Forfattere: </strong>{{bookInfo.data.authors}}</li>
         <li ng-if="bookInfo.metadata.ed"><strong>Utgave: </strong>{{bookInfo.metadata.ed}}</li>
-        <li><strong>Utgitt: </strong>{{bookInfo.data.issued}}</li>
+        <li><strong>Utgitt år: </strong>{{bookInfo.data.issued}}</li>
         <li><strong>Omfang: </strong>{{bookInfo.data.extent | extent}}</li>
         <li ng-if="bookInfo.data.isbn"><strong>ISBN: </strong>{{bookInfo.data.isbn}}</li>
         <li><strong>URN: </strong>{{bookInfo.urn}}</li>
