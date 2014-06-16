@@ -71,7 +71,10 @@ angular.module('core').controller('HeaderController', [
   '$location',
   '$modal',
   'ReaderControls',
-  function ($scope, Menus, $anchorScroll, $location, $modal, ReaderControls) {
+  'BookInfo',
+  function ($scope, Menus, $anchorScroll, $location, $modal, ReaderControls, BookInfo) {
+    $scope.bookInfo = BookInfo;
+    $scope.showSettings = false;
     $scope.isCollapsed = false;
     $scope.menu = Menus.getMenu('topbar');
     $scope.toggleCollapsibleMenu = function () {
@@ -265,14 +268,19 @@ angular.module('leser').controller('LeserController', [
   '$timeout',
   'Search',
   '$window',
-  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window) {
+  'BookInfo',
+  function ($scope, $rootScope, Tilemap, $document, $stateParams, $location, ReaderControls, $timeout, Search, $window, BookInfo) {
     $rootScope.error = '';
     // reset error messages
+    $scope.showSettings = false;
     var urn = $stateParams.urn;
-    // set title
+    BookInfo.urn = urn;
+    // set title and get book information
     var searchPromise = Search.get('urn:"' + urn + '"');
     searchPromise.then(function (data) {
       $window.document.title = data.entry[0].title.$t;
+      // book info service
+      BookInfo.get(data.entry[0].sesamid);
     });
     $scope.controls = ReaderControls;
     $scope.controls.show = true;
@@ -416,6 +424,112 @@ angular.module('leser').directive('scaleRow', function () {
     }
   };
 });'use strict';
+angular.module('leser').filter('extent', function () {
+  return function (input) {
+    // Extent directive logic
+    // transform abbreviations
+    // sides
+    var out = input.replace(/ s\./gi, ' sider');
+    // illustrated
+    out = out.replace(/ ill\./gi, ' illustrert');
+    // commas
+    out = out.replace(/([a-z]) /gi, '$1, ');
+    return out;
+  };
+});'use strict';
+angular.module('leser').factory('BookInfo', [
+  '$http',
+  '$modal',
+  '$rootScope',
+  function ($http, $modal, $rootScope) {
+    // Object to return
+    var _bookInfo = {
+        data: {},
+        show: false
+      };
+    function _getWorldcatMetadata(isbn) {
+      // enhance metadata
+      _bookInfo.metadata = {};
+      $http.get('/metadata/' + isbn).success(function (data) {
+        if (data.stat === 'ok') {
+          //console.log(data);
+          _bookInfo.metadata = data;
+          var metadata = data.list[0];
+          // override metadata
+          if (metadata.publisher)
+            _bookInfo.publisher = metadata.publisher;
+          if (metadata.ed)
+            _bookInfo.edition = metadata.ed;
+          if (metadata.city)
+            _bookInfo.city = metadata.city;
+        }
+      }).error(function (err) {
+        console.log(err);
+      });
+    }
+    // initialize function
+    function _get(id) {
+      _bookInfo.data = {};
+      $http.get('/bookinfo/' + id).success(function (data) {
+        //console.log(data);
+        _bookInfo.data = data.mods;
+        // map useful data to shorter names
+        _bookInfo.extent = _bookInfo.data.physicalDescription.extent;
+        _bookInfo.publisher = _bookInfo.data.originInfo.publisher;
+        _bookInfo.title = _bookInfo.data.titleInfo.title;
+        // Issued
+        if (Array.isArray(_bookInfo.data.originInfo.dateIssued)) {
+          _bookInfo.issued = _bookInfo.data.originInfo.dateIssued[1].$t;
+        } else
+          _bookInfo.issued = _bookInfo.data.originInfo.dateIssued;
+        // ISBN
+        if (_bookInfo.data.identifier[0].type === 'isbn') {
+          _bookInfo.isbn = _bookInfo.data.identifier[0].$t;
+          var isbn = Number(_bookInfo.isbn.split(' ')[0]);
+          if (typeof isbn === 'number') {
+            _getWorldcatMetadata(isbn);
+          }
+        }
+        // Author(s)
+        if (Array.isArray(_bookInfo.data.note)) {
+          _bookInfo.authors = _bookInfo.data.note[0].$t;
+        } else
+          _bookInfo.author = _bookInfo.data.note.$t;  //store to two different names, detect which is present in view
+      }).error(function (err) {
+        console.log(err);
+      });
+    }
+    _bookInfo.get = _get;
+    // modal
+    $rootScope.$watch(function () {
+      return _bookInfo.show;
+    }, function (newValue, oldValue) {
+      if (newValue === true) {
+        var modalInstance = $modal.open({
+            templateUrl: '/modules/leser/views/book-info-modal.view.html',
+            controller: 'BookInfoController'
+          });
+        modalInstance.result.then(function () {
+          // closed
+          _bookInfo.show = false;
+        }, function () {
+          // dismissed
+          _bookInfo.show = false;
+        });
+      }
+    });
+    // Public API
+    return _bookInfo;
+  }
+]);
+angular.module('leser').controller('BookInfoController', [
+  '$scope',
+  'BookInfo',
+  '$stateParams',
+  function ($scope, BookInfo, $stateParams) {
+    $scope.bookInfo = BookInfo;
+  }
+]);'use strict';
 angular.module('leser').factory('ReaderControls', [
   '$location',
   '$anchorScroll',
@@ -434,12 +548,16 @@ angular.module('leser').factory('ReaderControls', [
     }
     var _windowHeight = $window.innerHeight;
     var _pageList = [1];
+    var _level = ipCookie('level');
+    if (_level === undefined) {
+      _level = 5;
+    }
     var _controls = {
         pages: 1,
         pageList: _pageList,
         currentPage: _pageList[0],
         firstRun: true,
-        level: ipCookie('level') || 5,
+        level: _level,
         levels: 6,
         levelList: [
           0,
@@ -617,9 +735,6 @@ angular.module('search').controller('SearchController', [
     $window.document.title = 'S\xf8keresultat for ' + query;
     ReaderControls.show = false;
     $scope.query = query;
-    $scope.read = function (urn) {
-      $location.url('/leser/' + urn);
-    };
     $scope.error = false;
     $scope.searchResults = [];
     var searchPromise = Search.get(query);
@@ -629,13 +744,31 @@ angular.module('search').controller('SearchController', [
         var urn = data.entry[0]['nb:urn'].$t;
         $location.url('/leser/' + urn);
       }  //console.log(data);
-         //console.log(data.entry[0]['nb:sesamid']);
     }, function (error) {
       $rootScope.error = error;
       $location.url('/');
     });
   }
 ]);'use strict';
+angular.module('search').filter('semicolonList', function () {
+  function unique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  function capitalize(value, index, self) {
+    return value.toLowerCase().charAt(0).toUpperCase() + value.slice(1);
+  }
+  return function (input) {
+    var list = input.split('; ');
+    list = list.map(capitalize).sort();
+    list = list.filter(unique);
+    var listHtml = '';
+    for (var i = 0; i < list.length; i++) {
+      listHtml += list[i] + ', ';
+    }
+    listHtml = listHtml.slice(0, -2) + '.';
+    return listHtml;
+  };
+});'use strict';
 angular.module('core').factory('Search', [
   '$http',
   '$q',
@@ -649,10 +782,12 @@ angular.module('core').factory('Search', [
       }
       for (var i = 0; i < data.entry.length; i++) {
         var entry = data.entry[i];
+        // get sesamid from link[0]
+        entry.sesamid = entry.link[0].href.replace(/^http:\/\/[a-z.]*(\/[a-z0-9]+){4}\//i, '');
         if (typeof entry['nb:urn'] === 'undefined' || typeof entry['nb:digital'] === 'undefined' || entry['nb:digital'].$t === 'false') {
           var removed = data.entry.splice(i, 1);
-          console.log('error with data, removing ', removed);
-          break;
+          console.log('error with data, removing i:', i, removed);
+          continue;
         }
         var urn = entry['nb:urn'].$t;
         entry.cover = coverUrlTemplate + urn + '_C1';
@@ -664,31 +799,32 @@ angular.module('core').factory('Search', [
       }
       return data;
     }
-    function get(q, index, limit) {
+    function get(query, index, limit) {
       currentData = [];
       // reset upon new search
       deferred = $q.defer();
       // advanced search
-      q = q.replace(/(forfatter|f)[:=]/i, 'namecreators:');
-      q = q.replace(/(år|å)[:=]/i, 'year:');
-      q = q.replace(/(isbn|i)[:=]/i, 'isbn:');
-      q = q.replace(/(beskrivelse|b)[:=]/i, 'description:');
+      query = query.replace(/(forfatter|f)[:=]/i, 'namecreators:');
+      query = query.replace(/(år|å)[:=]/i, 'year:');
+      query = query.replace(/(isbn|i)[:=]/i, 'isbn:');
+      query = query.replace(/(beskrivelse|b)[:=]/i, 'description:');
       // free text search
       var ftRegex = /(fritekst|ft)[:=](ja|j)/i;
-      if (q.search(ftRegex) !== -1) {
-        q = q.replace(ftRegex, '');
-        q += '&ft=1';
+      if (query.search(ftRegex) !== -1) {
+        query = query.replace(ftRegex, '');
+        query += '&ft=1';
       }
       // t: after ft:
-      q = q.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
+      query = query.replace(/(tittel|titel|titell|t)[:]/i, 'title:');
       // remove malformed search
-      q = q.replace(/[:=&/]$/i, '');
+      query = query.replace(/[:=&/]$/i, '');
       // append parameters
       index = index || 1;
       limit = limit || 50;
-      q += '&index=' + index;
-      q += '&items=' + limit;
-      $http.get('/search?q=' + q).success(function (data) {
+      query += '&index=' + index;
+      query += '&items=' + limit;
+      $http.get('/search?q=' + query).success(function (data) {
+        //console.log(data);
         /* object format:
             ns2:itemsPerPage
             ns2:startIndex
