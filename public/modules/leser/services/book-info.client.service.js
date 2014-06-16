@@ -31,7 +31,7 @@ function($http, $modal, $rootScope) {
     function _get(id){
         _bookInfo.data = {};
         $http.get('/bookinfo/' + id).success(function(data){
-            console.log(data);
+            //console.log(data);
             _bookInfo.data = data.mods;
             // map useful data to shorter names
             _bookInfo.extent = _bookInfo.data.physicalDescription.extent;

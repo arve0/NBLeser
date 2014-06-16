@@ -60,7 +60,7 @@ function($http, $q) {
         query += '&items=' + limit;
 
         $http.get('/search?q=' + query).success(function(data){
-            console.log(data);
+            //console.log(data);
             /* object format:
             ns2:itemsPerPage
             ns2:startIndex
