@@ -15,6 +15,7 @@ angular.module('leser').controller('LeserController',
         searchPromise.then(function(data){
             $window.document.title = data.entry[0].title.$t + ', av ' + data.entry[0]['nb:mainentry'].$t + ' - Les/stream gratis med NBLeser';
             // book info service
+            BookInfo.author = data.entry[0]['nb:mainentry'].$t;
             BookInfo.get(data.entry[0].sesamid);
         });
 

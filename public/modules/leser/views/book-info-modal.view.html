@@ -4,14 +4,14 @@
 </div>
 <div class="modal-body">
     <ul>
-        <li><strong>Tittel: </strong>{{bookInfo.title}}</li>
-        <li><strong>Forlag: </strong>{{bookInfo.publisher}}<span ng-if="bookInfo.city">, {{bookInfo.city}}</span></li>
-        <li ng-if="bookInfo.author"><strong>Forfatter: </strong>{{bookInfo.author}}</li>
-        <li ng-if="bookInfo.authors"><strong>Forfattere: </strong>{{bookInfo.authors}}</li>
-        <li ng-if="bookInfo.edition"><strong>Utgave: </strong>{{bookInfo.edition}}</li>
-        <li><strong>Utgitt: </strong>{{bookInfo.issued}}</li>
-        <li><strong>Omfang: </strong>{{bookInfo.extent | extent}}</li>
-        <li ng-if="bookInfo.isbn"><strong>ISBN: </strong>{{bookInfo.isbn}}</li>
+        <li><strong>Tittel: </strong>{{bookInfo.data.title}}</li>
+        <li><strong>Forlag: </strong>{{bookInfo.data.publisher}}<span ng-if="bookInfo.metadata.city">, {{bookInfo.metadata.city}}</span></li>
+        <li ng-if="bookInfo.data.author"><strong>Forfatter: </strong>{{bookInfo.data.author}}</li>
+        <li ng-if="bookInfo.data.authors"><strong>Forfattere: </strong>{{bookInfo.data.authors}}</li>
+        <li ng-if="bookInfo.metadata.ed"><strong>Utgave: </strong>{{bookInfo.metadata.ed}}</li>
+        <li><strong>Utgitt: </strong>{{bookInfo.data.issued}}</li>
+        <li><strong>Omfang: </strong>{{bookInfo.data.extent | extent}}</li>
+        <li ng-if="bookInfo.data.isbn"><strong>ISBN: </strong>{{bookInfo.data.isbn}}</li>
         <li><strong>URN: </strong>{{bookInfo.urn}}</li>
     </ul>
 </div>
