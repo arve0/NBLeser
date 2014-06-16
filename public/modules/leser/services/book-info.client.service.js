@@ -34,7 +34,12 @@ function($http, $modal, $rootScope) {
             // map useful data to shorter names
             _bookInfo.data.extent = _bookInfo.data.physicalDescription.extent;
             _bookInfo.data.publisher = _bookInfo.data.originInfo.publisher;
-            _bookInfo.data.title = _bookInfo.data.titleInfo.title;
+            // title
+            if (Array.isArray(_bookInfo.data.titleInfo)){
+                _bookInfo.data.title = _bookInfo.data.titleInfo[0].title;
+            }
+            else _bookInfo.data.title = _bookInfo.data.titleInfo.title;
+            
             // Issued
             if (Array.isArray(_bookInfo.data.originInfo.dateIssued)){
                 _bookInfo.data.issued = _bookInfo.data.originInfo.dateIssued[1].$t;

@@ -280,6 +280,7 @@ angular.module('leser').controller('LeserController', [
     searchPromise.then(function (data) {
       $window.document.title = data.entry[0].title.$t + ', av ' + data.entry[0]['nb:mainentry'].$t + ' - Les/stream gratis med NBLeser';
       // book info service
+      BookInfo.author = data.entry[0]['nb:mainentry'].$t;
       BookInfo.get(data.entry[0].sesamid);
     });
     $scope.controls = ReaderControls;
@@ -428,15 +429,31 @@ angular.module('leser').filter('extent', function () {
   return function (input) {
     // Extent directive logic
     // transform abbreviations
-    // sides
+    // s. -> sider
     var out = input.replace(/ s\./gi, ' sider');
-    // illustrated
+    // bl. -> blad
+    out = out.replace(/ bl\./gi, ' blad');
+    // ill. -> illustrert
     out = out.replace(/ ill\./gi, ' illustrert');
+    // fold. -> foldet
+    out = out.replace(/ fold\./gi, ' foldet');
+    // kart. -> kart
+    out = out.replace(/ kart\./gi, ' kartblad');
     // commas
     out = out.replace(/([a-z]) /gi, '$1, ');
+    // remove special case commas
+    out = out.replace(/ foldet, kartblad/gi, ' foldet kartblad');
     return out;
   };
 });'use strict';
+angular.module('leser').filter('publisher', [function () {
+    return function (input) {
+      // Forlag directive logic 
+      // forl. -> forlag
+      input = input.replace('forl.', 'forlag');
+      return input;
+    };
+  }]);'use strict';
 angular.module('leser').factory('BookInfo', [
   '$http',
   '$modal',
@@ -455,13 +472,9 @@ angular.module('leser').factory('BookInfo', [
           //console.log(data);
           _bookInfo.metadata = data;
           var metadata = data.list[0];
-          // override metadata
+          // override data
           if (metadata.publisher)
-            _bookInfo.publisher = metadata.publisher;
-          if (metadata.ed)
-            _bookInfo.edition = metadata.ed;
-          if (metadata.city)
-            _bookInfo.city = metadata.city;
+            _bookInfo.data.publisher = metadata.publisher;
         }
       }).error(function (err) {
         console.log(err);
@@ -474,27 +487,33 @@ angular.module('leser').factory('BookInfo', [
         //console.log(data);
         _bookInfo.data = data.mods;
         // map useful data to shorter names
-        _bookInfo.extent = _bookInfo.data.physicalDescription.extent;
-        _bookInfo.publisher = _bookInfo.data.originInfo.publisher;
-        _bookInfo.title = _bookInfo.data.titleInfo.title;
+        _bookInfo.data.extent = _bookInfo.data.physicalDescription.extent;
+        _bookInfo.data.publisher = _bookInfo.data.originInfo.publisher;
+        // title
+        if (Array.isArray(_bookInfo.data.titleInfo)) {
+          _bookInfo.data.title = _bookInfo.data.titleInfo[0].title;
+        } else
+          _bookInfo.data.title = _bookInfo.data.titleInfo.title;
         // Issued
         if (Array.isArray(_bookInfo.data.originInfo.dateIssued)) {
-          _bookInfo.issued = _bookInfo.data.originInfo.dateIssued[1].$t;
+          _bookInfo.data.issued = _bookInfo.data.originInfo.dateIssued[1].$t;
         } else
-          _bookInfo.issued = _bookInfo.data.originInfo.dateIssued;
+          _bookInfo.data.issued = _bookInfo.data.originInfo.dateIssued;
         // ISBN
         if (_bookInfo.data.identifier[0].type === 'isbn') {
-          _bookInfo.isbn = _bookInfo.data.identifier[0].$t;
-          var isbn = Number(_bookInfo.isbn.split(' ')[0]);
+          _bookInfo.data.isbn = _bookInfo.data.identifier[0].$t;
+          var isbn = Number(_bookInfo.data.isbn.split(' ')[0]);
           if (typeof isbn === 'number') {
             _getWorldcatMetadata(isbn);
           }
         }
         // Author(s)
-        if (Array.isArray(_bookInfo.data.note)) {
-          _bookInfo.authors = _bookInfo.data.note[0].$t;
-        } else
-          _bookInfo.author = _bookInfo.data.note.$t;  //store to two different names, detect which is present in view
+        if (_bookInfo.data.note) {
+          if (Array.isArray(_bookInfo.data.note)) {
+            _bookInfo.data.authors = _bookInfo.data.note[0].$t;
+          } else
+            _bookInfo.data.author = _bookInfo.data.note.$t;  //store to two different names, detect which is present in view
+        }
       }).error(function (err) {
         console.log(err);
       });
