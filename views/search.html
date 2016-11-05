@@ -1,0 +1,30 @@
+<section data-ng-controller="SearchController" class="search">
+    <h4>Søkeresultat for <small>{{query}}</small></h3>
+    <ul ng-repeat="result in searchResults" class="search-list">
+        <li ng-repeat="book in result.entry" class="book-entry">
+            <div class="image">
+                <a ng-href="/#/leser/{{book['nb:urn'].content}}" tooltip="Trykk for å lese">
+                    <img ng-src="{{book.cover}}" />
+                </a>
+            </div>
+            <div class="details">
+                <accordion>
+                    <accordion-group is-open="status.open">
+                        <accordion-heading>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                            <a tooltip="Trykk for å vise detaljer">{{book.title.content}}</a>
+                        </accordion-heading>
+                        <ul>
+                            <li><strong>Forfatter(e):</strong> {{book['nb:namecreators'].content}}</li>
+                            <li><strong>Utgitt:</strong> {{book['nb:year'].content}}</li>
+                            <li ng-if="book['nb:isbn'].content"><strong>ISBN:</strong> {{book['nb:isbn'].content}}</li>
+                            <li><strong>URN:</strong> {{book['nb:urn'].content}}</li>
+                            <li ng-if="book['nb:subjecttopic'].content"><strong>Stikkord: </strong>{{ book['nb:subjecttopic'].content | semicolonList }}</li>
+                        </ul>
+                    </accordion-group>
+                </accordion>
+                <a class="btn btn-default les" ng-href="/#/leser/{{book['nb:urn'].content}}">Les</a>
+            </div>
+        </li>
+    </ul>
+</section>

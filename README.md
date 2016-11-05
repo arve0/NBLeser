@@ -8,8 +8,8 @@ Hvorfor
 =======
 Jeg har irritert meg over Nasjonalbibliotekets leser, og håper de vil forbedre den. Her er noen av de tingene jeg mener ikke er optimale:
 
-* Kræsjer ofte 
-    - ubrukelig på iPad 
+* Kræsjer ofte
+    - ubrukelig på iPad
     - er på grunn av minnelekasje ved CSS overflow-y og -webkit-overflow-scrolling touch på iOS
 * Dårlige muligheter for zoom
 * Dårlig kontroll over kvalitet
@@ -47,7 +47,8 @@ Søkeforslag - http://www.nb.no/nbsok/suggestion/search?searchString=jo&maxResul
 git clone https://github.com/arve0/NBLeser.git
 cd NBLeser
 npm install
-grunt
+bower install
+npm run build
 ```
 Åpne nettleser og gå til http://localhost:3000/
 

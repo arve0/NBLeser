@@ -1,0 +1,28 @@
+{
+  "name": "angular-spinner-loading",
+  "main": [
+    "src/loading-bar.js",
+    "src/loading-bar.css"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "example"
+  ],
+  "devDependencies": {
+    "angular-mocks": "~1.2.9",
+    "angular-animate": "~1.2.9"
+  },
+  "homepage": "https://github.com/sergicontre/angular-spinner-loading",
+  "_release": "534ed6cc66",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "534ed6cc668ba7ca2553366603b315aa31e1a6de"
+  },
+  "_source": "https://github.com/sergicontre/angular-spinner-loading.git",
+  "_target": "*",
+  "_originalSource": "angular-spinner-loading"
+}

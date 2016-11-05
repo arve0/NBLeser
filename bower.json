@@ -1,8 +1,9 @@
 {
   "name": "nbleser",
   "version": "0.0.1",
-  "description": "Et alternativ til nasjonalbibliotekets egen leser.",
+  "description": "Et alternativ til nasjonalbibliotekets leser.",
   "dependencies": {
+    "jquery": "*",
     "bootstrap": "~3",
     "angular": "~1.2",
     "angular-resource": "~1.2",
@@ -13,8 +14,6 @@
     "angular-bootstrap": "~0.10.0",
     "angular-ui-utils": "~0.1.1",
     "angular-ui-router": "~0.2.10",
-    "github-fork-ribbon-css": "~0.1.0",
-    "angular-spinner-loading": "*",
     "angular-cookie": "~4.0.0"
   }
 }

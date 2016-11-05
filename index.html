@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="nbleser">
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <!-- mobile viewport/zoom -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- icon -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-152x152.png" />
+  <!-- Windows 8 Tile Icons -->
+  <meta name="msapplication-square70x70logo" content="img/smalltile.png" />
+  <meta name="msapplication-square150x150logo" content="img/mediumtile.png" />
+  <meta name="msapplication-wide310x150logo" content="img/widetile.png" />
+  <meta name="msapplication-square310x310logo" content="img/largetile.png" />
+  <!-- Fav Icon -->
+  <link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  <!-- TODO: Search engine optimation -->
+  <meta name="keywords" content="{{keywords}}">
+  <meta name="description" content="{{description}}">
+
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="ng-cloak">
+	<header data-ng-include="'views/header.html'" class="navbar navbar-fixed-top navbar-inverse menu"></header>
+
+	<section class="content">
+  	<section data-ui-view></section>
+	</section>
+
+	<script type="text/javascript" src="lib/vendor.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>

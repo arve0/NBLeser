@@ -1,0 +1,44 @@
+<section data-ng-controller="HomeController" class="home">
+    <div>
+        <div class="top">
+            <div class="form-inline search-input">
+                <div>
+                    <form ng-submit="search(query)">
+                        <input type="text" ng-model="query" class="form-control" ui-reset>
+                    </form>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-default" ng-click="search(query)">Søk</button>
+                    <button class="btn btn-success" ng-click="readFirstHit(query)">Les første treff</button>
+                    <button class="btn btn-primary hidden-xs" ng-click="read(query)">Les URN</button>
+                </div>
+            </div>
+            <div class="alert alert-warning" ng-if="error">{{error}}</div>
+        </div>
+        <h3>Søketips</h3>
+        <p class="search-tips">
+            <strong>Sammenhengende ord</strong><br>
+            Bruk anførselstegn(") for å kreve at ord kommer etter hverandre.<br>
+            Eksempel: <a href="/#/search/&quot;kommunen som&quot;">"kommunen som"</a>.<br><br>
+            <strong>Tittel</strong><br>
+            Søk bare i tittel med å bruke <b>t:tittel</b>.<br>
+            Eksempel: <a href="/#/search/t:dråper">t:dråper</a>.<br><br>
+            <strong>Forfatter</strong><br>
+            Bruk <b>f:forfatter</b> for å søke etter en spesifikk forfatter.<br>
+            Eksempel: <a href="/#/search/f:seljebu">f:seljebu</a> eller <a href="/#/search/f:&quot;lars kristian&quot;">f:"lars kristian"</a>.<br><br>
+            <strong>År</strong><br>
+            Bruk <b>å:årstall</b> for å søke etter bøker som er utgitt på et gitt årstall.<br>
+            Eksempel: <a href="/#/search/å:2000">å:2000</a>.<br><br>
+            <strong>ISBN</strong><br>
+            Bruk <b>i:isbn</b> for å søke etter bok med gitt ISBN.<br>
+            Eksempel: <a href="/#/search/i:0132711982">i:0132711982</a>.<br><br>
+            <strong>Fritekst</strong><br>
+            Bruk <b>ft:ja</b> for å også søke i innholdet til bøkene.<br>
+            Eksempel: <a href="/#/search/&quot;drepte hunden&quot; ft:ja">"drepte hunden" ft:ja</a>.<br><br>
+            <strong>Kombinere</strong><br>
+            Søket viser kun de første 50 treff, sortert etter utgivelsesdato (nyeste først).
+            Kombiner derfor uttrykk for å få mer presise treff.
+            Eksempel: <a href="/#/search/f:olsen å:2000">f:olsen å:2000</a>.<br><br>
+        </p>
+    </div>
+</section>

@@ -1,7 +1,7 @@
 ## License
 (The MIT License)
 
-Copyright (c) 2014 Arve Seljebu
+Copyright (c) 2014-2016 Arve Seljebu
 
 a copy of this software and associated documentation files (the
 'Software'), to deal in the Software without restriction, including
