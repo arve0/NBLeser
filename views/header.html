@@ -8,12 +8,12 @@
         </button>
         <span history="back"></span>
         <span history="forward"></span>
-        <a href="/#/" class="navbar-brand">NBLeser</a>
+        <a href="#/" class="navbar-brand">NBLeser</a>
     </div>
     <nav class="collapse navbar-collapse" collapse="!isCollapsed" role="navigation">
         <ul class="nav navbar-nav">
             <li data-ng-repeat="item in menu.items" ui-route="{{item.uiRoute}}" ng-class="{active: $uiRoute}">
-                    <a href="/#/{{item.link}}">{{item.title}}</a>
+                    <a href="#/{{item.link}}">{{item.title}}</a>
             </li>
         </ul>
         <ul class="nav navbar-nav">

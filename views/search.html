@@ -3,7 +3,7 @@
     <ul ng-repeat="result in searchResults" class="search-list">
         <li ng-repeat="book in result.entry" class="book-entry">
             <div class="image">
-                <a ng-href="/#/leser/{{book['nb:urn'].content}}" tooltip="Trykk for å lese">
+                <a ng-href="#/leser/{{book['nb:urn'].content}}" tooltip="Trykk for å lese">
                     <img ng-src="{{book.cover}}" />
                 </a>
             </div>
@@ -23,7 +23,7 @@
                         </ul>
                     </accordion-group>
                 </accordion>
-                <a class="btn btn-default les" ng-href="/#/leser/{{book['nb:urn'].content}}">Les</a>
+                <a class="btn btn-default les" ng-href="#/leser/{{book['nb:urn'].content}}">Les</a>
             </div>
         </li>
     </ul>
