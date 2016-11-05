@@ -8,7 +8,7 @@ angular.module('leser').config(
         $stateProvider.
         state('leser', {
             url: '/leser/:urn',
-            templateUrl: '../views/leser.html'
+            templateUrl: 'views/leser.html'
         });
     }
 );
@@ -310,7 +310,7 @@ function($http, $modal, $rootScope) {
     }, function (newValue, oldValue){
         if (newValue === true) {
             var modalInstance = $modal.open({
-                templateUrl: '../views/book-info-modal.html',
+                templateUrl: 'views/book-info-modal.html',
                 controller: 'BookInfoController',
             });
             modalInstance.result.then(function(){

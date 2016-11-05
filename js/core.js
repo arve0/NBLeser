@@ -10,7 +10,7 @@ angular.module('core').config(
         $stateProvider.
         state('home', {
             url: '/',
-            templateUrl: '../views/home.html'
+            templateUrl: 'views/home.html'
         });
     }
 );
@@ -33,7 +33,7 @@ angular.module('core').controller('HeaderController',
         var modalInstance;
         $scope.showTerms = function(){
             modalInstance = $modal.open({
-              templateUrl: '../views/terms.html',
+              templateUrl: 'views/terms.html',
               scope: $scope,
             });
         };

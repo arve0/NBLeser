@@ -10,7 +10,7 @@ angular.module('core').config(
         $stateProvider.
         state('home', {
             url: '/',
-            templateUrl: '../views/home.html'
+            templateUrl: 'views/home.html'
         });
     }
 );
@@ -33,7 +33,7 @@ angular.module('core').controller('HeaderController',
         var modalInstance;
         $scope.showTerms = function(){
             modalInstance = $modal.open({
-              templateUrl: '../views/terms.html',
+              templateUrl: 'views/terms.html',
               scope: $scope,
             });
         };
@@ -203,7 +203,7 @@ angular.module('search').config(['$stateProvider',
 		$stateProvider.
 		state('search', {
 			url: '/search/:query',
-			templateUrl: '../views/search.html'
+			templateUrl: 'views/search.html'
 		});
 	}
 ]);
@@ -378,7 +378,7 @@ angular.module('leser').config(
         $stateProvider.
         state('leser', {
             url: '/leser/:urn',
-            templateUrl: '../views/leser.html'
+            templateUrl: 'views/leser.html'
         });
     }
 );
@@ -680,7 +680,7 @@ function($http, $modal, $rootScope) {
     }, function (newValue, oldValue){
         if (newValue === true) {
             var modalInstance = $modal.open({
-                templateUrl: '../views/book-info-modal.html',
+                templateUrl: 'views/book-info-modal.html',
                 controller: 'BookInfoController',
             });
             modalInstance.result.then(function(){

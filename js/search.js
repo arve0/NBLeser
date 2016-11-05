@@ -8,7 +8,7 @@ angular.module('search').config(['$stateProvider',
 		$stateProvider.
 		state('search', {
 			url: '/search/:query',
-			templateUrl: '../views/search.html'
+			templateUrl: 'views/search.html'
 		});
 	}
 ]);
