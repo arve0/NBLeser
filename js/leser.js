@@ -245,7 +245,7 @@ function($http, $modal, $rootScope) {
     function _getWorldcatMetadata(isbn){
         // enhance metadata
         _bookInfo.metadata = {};
-        var url = 'http://crossorigin.me/';
+        var url = 'https://crossorigin.me/';
         url += 'http://xisbn.worldcat.org/webservices/xid/isbn/';
         url += isbn;
         url += '?method=getMetadata&format=json&fl=*&count=1';
@@ -266,7 +266,7 @@ function($http, $modal, $rootScope) {
     // initialize function
     function _get(id){
         _bookInfo.data = {};
-        var url = 'http://www.nb.no/services/search/v2/mods/' + id;
+        var url = 'https://www.nb.no/services/search/v2/mods/' + id;
         $http.get(url).success(function(data){
             //console.log(data);
             var d = new DOMParser().parseFromString(data, 'text/xml');
@@ -463,6 +463,7 @@ angular.module('leser').factory('Tilemap',
                 level.images.push([]);
                 for (var j=0; j < level.columns; j++){
                     var url = templateUrl.replace('{row}', i).replace('{column}', j);
+                    url = url.replace(/^http:/, 'https:');
                     level.images[i].push(url);
                 }
             }
@@ -496,7 +497,7 @@ angular.module('leser').factory('Tilemap',
             _pages.getNumberOfLevels = getNumberOfLevels;
 
             var deferred = $q.defer();
-            var url = 'http://crossorigin.me/';
+            var url = 'https://crossorigin.me/';
             url += 'http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
             url += urn;
             $http.get(url).success(function(data){

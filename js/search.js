@@ -70,7 +70,7 @@ function($http, $q) {
     var deferred;
 
     function refine(data) {
-        var coverUrlTemplate = 'http://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn=';
+        var coverUrlTemplate = 'https://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn=';
         if (Array.isArray(data.entry) !== true){
             data.entry = [data.entry];
         }
@@ -125,7 +125,7 @@ function($http, $q) {
         query += '&itemsPerPage=' + limit;
         query += '&sort=date:desc';
 
-        $http.get('http://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ' + query).success(function(data){
+        $http.get('https://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ' + query).success(function(data){
             // console.log(data);
             /* object format:
             ns2:itemsPerPage
