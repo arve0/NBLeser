@@ -1,4 +1,4 @@
-<section class="search loading" data-ng-controller="SearchController">
+<section class="search" ng-class="{loading: searchResults.length == 0}" data-ng-controller="SearchController">
     <h4>Søkeresultat for <small>{{query}}</small></h3>
     <ul ng-repeat="result in searchResults" class="search-list">
         <li ng-repeat="book in result.entry" class="book-entry">
