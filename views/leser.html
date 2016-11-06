@@ -1,5 +1,5 @@
 <section data-ng-controller="LeserController">
-    <div class="book" book-width="controls.zoom">
+    <div class="book loading" book-width="controls.zoom">
         <div ng-repeat="page in pages" id="p{{$index + 1}}" page-height zoom="controls.zoom" class="loading">
             <div class="page" ng-if="controls.showPage(scrollTop, page.offsetTop, page.offsetBottom)">
                 <div ng-repeat="row in page.currentLevel.images" class="tile-row" scale-row>

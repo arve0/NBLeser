@@ -1,6 +1,6 @@
 Om
 ==
-Dette er en alternativ leser for ebøkene på den digitale bokhylla til Nasjonalbiblioteket. Fra bokhylla kan du streame/lese over 170 tusen norske bøker, helt gratis! Du kan bruke leseren her: https://arve0.github.io/NBLeser/
+Dette er en alternativ leser for ebøkene på den digitale bokhylla til Nasjonalbiblioteket. Fra bokhylla kan du lese over 170 tusen norske bøker, helt gratis! Du kan bruke leseren her: https://arve0.github.io/NBLeser/
 
 Her er en demovideo av leseren: https://youtu.be/waUmeowGwjM
 

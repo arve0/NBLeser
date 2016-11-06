@@ -3,6 +3,7 @@
 /* Mixins */
 .book {
   margin: 0 auto;
+  min-height: 300px;
 }
 .book .page {
   display: -webkit-box;
@@ -89,6 +90,7 @@
 }
 .search {
   width: 90%;
+  min-height: 300px;
   margin: 30px auto;
 }
 .search-list {

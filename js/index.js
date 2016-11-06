@@ -868,7 +868,7 @@ angular.module('leser').factory('Tilemap',
 
             var deferred = $q.defer();
             var url = 'https://crossorigin.me/';
-            url += 'http://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
+            url += 'https://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
             url += urn;
             $http.get(url).success(function(data){
                 if (!data.pages) {
