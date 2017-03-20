@@ -245,7 +245,7 @@ function($http, $modal, $rootScope) {
     function _getWorldcatMetadata(isbn){
         // enhance metadata
         _bookInfo.metadata = {};
-        var url = 'https://crossorigin.me/';
+        var url = 'https://cors.seljebu.no/';
         url += 'http://xisbn.worldcat.org/webservices/xid/isbn/';
         url += isbn;
         url += '?method=getMetadata&format=json&fl=*&count=1';
@@ -266,7 +266,8 @@ function($http, $modal, $rootScope) {
     // initialize function
     function _get(id){
         _bookInfo.data = {};
-        var url = 'https://www.nb.no/services/search/v2/mods/' + id;
+        var url = 'https://cors.seljebu.no/';
+        url += 'https://www.nb.no/services/search/v2/mods/' + id;
         $http.get(url).success(function(data){
             //console.log(data);
             var d = new DOMParser().parseFromString(data, 'text/xml');
@@ -497,7 +498,7 @@ angular.module('leser').factory('Tilemap',
             _pages.getNumberOfLevels = getNumberOfLevels;
 
             var deferred = $q.defer();
-            var url = 'https://crossorigin.me/';
+            var url = 'https://cors.seljebu.no/';
             url += 'https://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
             url += urn;
             $http.get(url).success(function(data){

@@ -36,7 +36,7 @@ https://www.nb.no/services/image/
 Metadata til bøker:
 http://xisbn.worldcat.org/webservices/xid/isbn/8200427005?method=getMetadata&format=json&fl=*
 
-Noen av ressursene hentes via https://crossorigin.me ettersom de ikke tillater CORS/`access-control-allow-origin`.
+Ressursene hentes via https://cors.seljebu.no/ ettersom de ikke tillater CORS/`access-control-allow-origin`.
 
 ## Ressurser som ikke er tatt i bruk
 Søkeforslag - https://www.nb.no/nbsok/suggestion/search?searchString=jo&maxResults=5&mediaType=&highlight=true
