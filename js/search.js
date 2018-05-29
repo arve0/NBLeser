@@ -29,9 +29,8 @@ function($rootScope, $scope, $stateParams, $location, Search, ReaderControls, $w
     var searchPromise = Search.get(query);
     searchPromise.then(function(data){
         $scope.searchResults.push(data);
-        if (data.entry.length === 1){
-            var urn = data.entry[0]['nb:urn'].content;
-            $location.url('/leser/' + urn);
+        if (data.length === 1){
+            $location.url('/leser/' + data[0].urn);
         }
         //console.log(data);
     },function(error){
@@ -66,38 +65,9 @@ function() {
 
 angular.module('core').factory('Search',
 function($http, $q) {
-    var currentData;
     var deferred;
 
-    function refine(data) {
-        var coverUrlTemplate = 'https://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn=';
-        if (Array.isArray(data.entry) !== true){
-            data.entry = [data.entry];
-        }
-        for (var i=0; i < data.entry.length; i++){
-            var entry = data.entry[i];
-            // get sesamid from link[0]
-            entry.sesamid = entry.link[0].href.replace(/^http:\/\/[a-z.]*(\/[a-z0-9]+){4}\//i, '');
-            if (typeof entry['nb:urn'] === 'undefined' ||
-                typeof entry['nb:digital'] === 'undefined' ||
-                entry['nb:digital'].content === 'false') {
-                var removed = data.entry.splice(i,1);
-                console.log('error with data, removing i:', i, removed);
-                continue;
-            }
-            var urn = entry['nb:urn'].content;
-            entry.cover = coverUrlTemplate + urn + '_C1';
-            if (urn.search('; ') !== -1){
-                // found several urns - fix
-                var splitted = urn.split('; ');
-                entry['nb:urn'].content = splitted[splitted.length -1];
-            }
-        }
-        return data;
-    }
-
     function get(query, index, limit) {
-        currentData = []; // reset upon new search
         deferred = $q.defer();
 
         // advanced search
@@ -130,36 +100,16 @@ function($http, $q) {
         url += query;
 
         $http.get(url).success(function(data){
-            // console.log(data);
-            /* object format:
-            ns2:itemsPerPage
-            ns2:startIndex
-            ns2:totalResults
-            link[].href - urls: [0] this, [1] next, [2] spec
-            entry[] - hits
-                .link[] - [0] book info, [2] urn url, [3] image structure
-                .nb:date.content
-                .nb:isbn.content
-                .nb:languages.content - format "mul; eng; nob"
-                .nb:mainentry.content  - author
-                .nb:namecreator.content - author
-                .nb:namecreators.content - authors
-                .nb:subjecttopic.content - topic
-                .nb:urn.content
-                .nb:year.content
-                .summary.content - format [redaktører/editors: Nevanka Dobljekar, ...;
-                                         tekst/text: Arve Hovig, ...;
-                                         oversettelse/translation: Marith Hope, ...;
-                                         fotografi/photography: Halvard Haugerud] Parallell norsk og engelsk tekst Utstillingskatalog
-                .title.content
-            nb:snippet.content extract of free text search
-            */
-
-            data = data.feed;
-            if (data.entry) {
-                data = refine(data);
-                currentData = data;
-                deferred.resolve(data);
+            var parser = new DOMParser()
+            var dom = parser.parseFromString(data, 'application/xml');
+            var entries = Array.from(dom.getElementsByTagName('entry'))
+                .map(parseEntry)
+                .filter(function (entry) {
+                    // fjern ugyldige treff
+                    return entry.urn && entry.digital && entry.digital === 'true';
+                });
+            if (entries.length > 0) {
+                deferred.resolve(entries);
             }
             else {
                 deferred.reject('Ingen treff.');
@@ -170,6 +120,34 @@ function($http, $q) {
         });
 
         return deferred.promise;
+    }
+
+    /**
+     * Get values for, urn, cover, title, namecreators, year, isbn and subjecttopic.
+     * @param {dom} entry
+     */
+    function parseEntry (entry) {
+        var keys = ['urn','cover','title','namecreators','year','isbn','subjecttopic', 'digital', 'sesamid', 'mainentry'];
+
+        var coverUrlTemplate = 'https://www.nb.no/services/image/resolver?url_ver=geneza&maxLevel=5&level=1&col=0&row=0&resX=1649&resY=2655&tileWidth=1024&tileHeight=1024&urn=';
+
+        return keys.reduce(function (e, k) {
+            if (k === 'urn') {
+                var urn = entry.querySelector(k).textContent;
+                if (urn.search('; ') !== -1){
+                    // found several urns - fix by taking last
+                    var splitted = urn.split('; ');
+                    urn = splitted[splitted.length - 1];
+                }
+                e[k] = urn;
+            } else if (k === 'cover') {
+                e[k] = coverUrlTemplate + e.urn + '_C1';
+            } else {
+                var element = entry.querySelector(k)
+                e[k] = element && element.textContent;
+            }
+            return e;
+        }, {});
     }
 
     return {

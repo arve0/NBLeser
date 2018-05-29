@@ -26,11 +26,11 @@ angular.module('leser').controller('LeserController',
 
         // set title and get book information
         var searchPromise = Search.get('urn:"' + urn + '"');
-        searchPromise.then(function(data){
-            $window.document.title = data.entry[0].title.content + ', av ' + data.entry[0]['nb:mainentry'].content + ' - Les/stream gratis med NBLeser';
+        searchPromise.then(function(entries){
+            $window.document.title = entries[0].title + ', av ' + entries[0].mainentry + ' - Les/stream gratis med NBLeser';
             // book info service
-            BookInfo.author = data.entry[0]['nb:mainentry'].content;
-            BookInfo.get(data.entry[0].sesamid);
+            BookInfo.author = entries[0].mainentry;
+            BookInfo.get(entries[0].sesamid);
         });
 
 

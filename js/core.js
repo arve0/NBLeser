@@ -61,8 +61,7 @@ function ($scope, $location, $rootScope, $http, Search, $modal, ReaderControls, 
         $scope.error = false;
         var searchPromise = Search.get(query);
         searchPromise.then(function(data){
-            var urn = data.entry[0]['nb:urn'].content;
-            $location.url('/leser/' + urn);
+            $location.url('/leser/' + data[0].urn);
         },function(err){
             $scope.error = err;
         });
