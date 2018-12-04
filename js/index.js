@@ -289,8 +289,7 @@ function($http, $q) {
         query += '&itemsPerPage=' + limit;
         query += '&sort=date:desc';
 
-        var url = 'https://cors.seljebu.no/';
-        url += 'https://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ';
+        var url = 'https://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ';
         url += query;
 
         $http.get(url).success(function(data){
@@ -617,8 +616,7 @@ function($http, $modal, $rootScope) {
     // initialize function
     function _get(id){
         _bookInfo.data = {};
-        var url = 'https://cors.seljebu.no/';
-        url += 'https://www.nb.no/services/search/v2/mods/' + id;
+        var url = 'https://www.nb.no/services/search/v2/mods/' + id;
         $http.get(url).success(function(data){
             //console.log(data);
             var d = new DOMParser().parseFromString(data, 'text/xml');
@@ -849,8 +847,7 @@ angular.module('leser').factory('Tilemap',
             _pages.getNumberOfLevels = getNumberOfLevels;
 
             var deferred = $q.defer();
-            var url = 'https://cors.seljebu.no/';
-            url += 'https://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
+            var url = 'https://www.nb.no/services/tilesv2/tilemap?viewer=html&pagetype=&format=json&URN=';
             url += urn;
             $http.get(url).success(function(data){
                 if (!data.pages) {

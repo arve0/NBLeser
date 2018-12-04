@@ -95,8 +95,7 @@ function($http, $q) {
         query += '&itemsPerPage=' + limit;
         query += '&sort=date:desc';
 
-        var url = 'https://cors.seljebu.no/';
-        url += 'https://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ';
+        var url = 'https://www.nb.no/services/search/v2/search?q=contentClasses:bokhylla ';
         url += query;
 
         $http.get(url).success(function(data){
